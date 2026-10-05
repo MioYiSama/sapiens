@@ -1,17 +1,17 @@
+import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite-plus";
-import { cloudflare } from "@cloudflare/vite-plugin";
 
 const ignorePatterns = ["src/routeTree.gen.ts"];
 
 export default defineConfig({
   plugins: [
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
     tanstackStart({ router: { tmpDir: "node_modules/.tanstack" } }),
     react({ compiler: true }),
     tailwindcss(),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
   ],
   resolve: { tsconfigPaths: true },
   lint: {

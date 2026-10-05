@@ -3,6 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "deploy": "cf deploy",
+    "cf-typegen": "cf workers types"
+  },
   "dependencies": {
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-start": "catalog:",
@@ -18,6 +24,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "cf": "catalog:",
     "oxc-transform-react": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
