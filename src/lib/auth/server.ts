@@ -1,10 +1,11 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
+import { i18n, locales } from "@better-auth/i18n";
 import { betterAuth } from "better-auth/minimal";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { env } from "cloudflare:workers";
 
-import { db } from "@/db";
-import * as schema from "@/db/auth-schema";
+import { db } from "@/lib/db";
+import * as schema from "@/lib/db/auth-schema";
 
 export const auth = betterAuth({
   baseURL: import.meta.env.VITE_BETTER_AUTH_URL,
@@ -14,5 +15,14 @@ export const auth = betterAuth({
     schema,
   }),
   advanced: { database: { joins: true } },
-  plugins: [tanstackStartCookies()],
+  plugins: [
+    i18n({
+      detection: ["header"],
+      translations: {
+        en: locales.en,
+        zh: locales.zh,
+      },
+    }),
+    tanstackStartCookies(),
+  ],
 });

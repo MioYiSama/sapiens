@@ -1,5 +1,7 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
+import { getLocale } from "@/lib/paraglide/runtime";
+
 import css from "@/index.css?url";
 
 export const Route = createRootRoute({
@@ -9,11 +11,14 @@ export const Route = createRootRoute({
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Sapiens" },
     ],
-    links: [{ rel: "stylesheet", href: css }],
+    links: [
+      { rel: "icon", href: "/favicon.svg" },
+      { rel: "stylesheet", href: css },
+    ],
   }),
   component() {
     return (
-      <html>
+      <html lang={getLocale()}>
         <head>
           <HeadContent />
         </head>
@@ -23,5 +28,8 @@ export const Route = createRootRoute({
         </body>
       </html>
     );
+  },
+  notFoundComponent() {
+    return <p>Not Found</p>;
   },
 });

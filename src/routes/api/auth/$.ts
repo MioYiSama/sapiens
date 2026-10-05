@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { auth } from "@/auth/server";
+import { auth } from "@/lib/auth/server";
 
 // https://better-auth.com/docs/integrations/tanstack#mount-the-handler
 export const Route = createFileRoute("/api/auth/$")({

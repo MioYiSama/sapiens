@@ -4,7 +4,7 @@ export default defineConfig({
   worker: {
     name: "sapiens",
     compatibilityDate: "2026-10-01",
-    entrypoint: "@tanstack/react-start/server-entry",
+    entrypoint: "src/server.ts",
     observability: {
       enabled: true,
       logs: { enabled: true },
