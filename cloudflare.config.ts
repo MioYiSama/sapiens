@@ -6,6 +6,9 @@ export default defineConfig({
     compatibilityDate: "2026-10-01",
     observability: {
       enabled: true,
+      logs: { enabled: true },
+      traces: { enabled: true },
+      issues: { enabled: true },
     },
     entrypoint: "@tanstack/react-start/server-entry",
   },
