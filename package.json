@@ -4,14 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
-    "build": "vp build",
-    "deploy": "cf deploy",
-    "cf-typegen": "cf workers types"
+    "dev": "cf dev",
+    "build": "cf build",
+    "deploy": "cf deploy --secrets-file .env.production",
+    "cf-typegen": "cf workers types",
+    "auth-schema": "vpx auth@latest generate --config src/auth/server.ts --output src/db -y",
+    "migrate": "cf d1 migrations apply 379a6408-bddc-4d8b-a3bd-b15f530eeedd --dir drizzle --pattern drizzle/*/migration.sql"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-start": "catalog:",
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "zod": "catalog:",
@@ -20,11 +25,11 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "catalog:",
     "@tailwindcss/vite": "catalog:",
-    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "cf": "catalog:",
+    "drizzle-kit": "catalog:",
     "oxc-transform-react": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",

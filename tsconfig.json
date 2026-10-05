@@ -1,7 +1,6 @@
 {
   "include": ["src", "*.config.ts"],
   "compilerOptions": {
-    "types": ["node"],
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "paths": {

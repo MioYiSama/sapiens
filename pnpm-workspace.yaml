@@ -13,6 +13,8 @@ catalog:
   "@types/react-dom": ^19.3.0
   "@vitejs/plugin-react": ^6.1.1
   cf: 1.0.0-beta.12
+  drizzle-kit: 1.0.0-rc.4
+  drizzle-orm: 1.0.0-rc.4
   oxc-transform-react: ^0.152.0
   react-dom: ^19.3.0
   react: ^19.3.0
@@ -22,6 +24,8 @@ catalog:
   vite: npm:@voidzero-dev/vite-plus-core@1.0.0
   zod: ^4.6.5
   zustand: ^5.0.15
+  better-auth: ^1.7.7
+  "@better-auth/drizzle-adapter": ^1.7.7
 
 overrides:
   vite@*: "catalog:"

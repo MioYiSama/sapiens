@@ -4,7 +4,7 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite-plus";
 
-const ignorePatterns = ["src/routeTree.gen.ts"];
+const ignorePatterns = ["src/routeTree.gen.ts", "src/db/auth-schema.ts"];
 
 export default defineConfig({
   plugins: [
