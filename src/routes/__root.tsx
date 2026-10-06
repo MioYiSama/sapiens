@@ -1,5 +1,6 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { getLocale } from "@/lib/paraglide/runtime";
 
 import css from "@/index.css?url";
@@ -23,7 +24,9 @@ export const Route = createRootRoute({
           <HeadContent />
         </head>
         <body>
-          <Outlet />
+          <TooltipProvider>
+            <Outlet />
+          </TooltipProvider>
           <Scripts />
         </body>
       </html>

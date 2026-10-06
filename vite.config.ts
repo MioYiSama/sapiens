@@ -9,13 +9,15 @@ const ignorePatterns = [
   "drizzle",
   "src/routeTree.gen.ts",
   "src/components/ui",
-  "src/db/auth-schema.ts",
+  "src/lib/db/auth-schema.ts",
   "src/paraglide",
 ];
 
 export default defineConfig({
   plugins: [
-    tanstackStart({ router: { tmpDir: "node_modules/.tanstack" } }),
+    tanstackStart({
+      router: { tmpDir: "node_modules/.tanstack" },
+    }),
     react({ compiler: true }),
     tailwindcss(),
     paraglideVitePlugin({

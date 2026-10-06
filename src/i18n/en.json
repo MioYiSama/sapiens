@@ -1,4 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Hello world {username}"
+  "show_sidebar": "Show sidebar",
+  "hide_sidebar": "Hide sidebar",
+  "conversation": "Conversation",
+  "account_settings": "Account settings"
 }

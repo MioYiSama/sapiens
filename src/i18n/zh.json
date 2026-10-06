@@ -1,4 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "你好 世界 {username}"
+  "show_sidebar": "显示侧边栏",
+  "hide_sidebar": "隐藏侧边栏",
+  "conversation": "对话",
+  "account_settings": "账户设置"
 }
