@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as MainRouteImport } from './routes/_main'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
-import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainGraphRouteImport } from './routes/_main/graph'
+import { Route as MainChar123IdChar125RouteImport } from './routes/_main/{-$id}'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const MainRoute = MainRouteImport.update({
@@ -30,14 +30,14 @@ const AuthSignupRoute = AuthSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MainIndexRoute = MainIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MainRoute,
-} as any)
 const MainGraphRoute = MainGraphRouteImport.update({
   id: '/graph',
   path: '/graph',
+  getParentRoute: () => MainRoute,
+} as any)
+const MainChar123IdChar125Route = MainChar123IdChar125RouteImport.update({
+  id: '/{-$id}',
+  path: '/{-$id}',
   getParentRoute: () => MainRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -47,17 +47,19 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof MainIndexRoute
+  '/': typeof MainRouteWithChildren
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
   '/graph': typeof MainGraphRoute
+  '/{-$id}': typeof MainChar123IdChar125Route
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof MainRouteWithChildren
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
   '/graph': typeof MainGraphRoute
-  '/': typeof MainIndexRoute
+  '/{-$id}': typeof MainChar123IdChar125Route
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -66,21 +68,21 @@ export interface FileRoutesById {
   '/_auth/signin': typeof AuthSigninRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/_main/graph': typeof MainGraphRoute
-  '/_main/': typeof MainIndexRoute
+  '/_main/{-$id}': typeof MainChar123IdChar125Route
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signin' | '/signup' | '/graph' | '/api/auth/$'
+  fullPaths: '/' | '/signin' | '/signup' | '/graph' | '/{-$id}' | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/signin' | '/signup' | '/graph' | '/' | '/api/auth/$'
+  to: '/' | '/signin' | '/signup' | '/graph' | '/{-$id}' | '/api/auth/$'
   id:
     | '__root__'
     | '/_main'
     | '/_auth/signin'
     | '/_auth/signup'
     | '/_main/graph'
-    | '/_main/'
+    | '/_main/{-$id}'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -114,18 +116,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_main/': {
-      id: '/_main/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof MainIndexRouteImport
-      parentRoute: typeof MainRoute
-    }
     '/_main/graph': {
       id: '/_main/graph'
       path: '/graph'
       fullPath: '/graph'
       preLoaderRoute: typeof MainGraphRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/{-$id}': {
+      id: '/_main/{-$id}'
+      path: '/{-$id}'
+      fullPath: '/{-$id}'
+      preLoaderRoute: typeof MainChar123IdChar125RouteImport
       parentRoute: typeof MainRoute
     }
     '/api/auth/$': {
@@ -140,12 +142,12 @@ declare module '@tanstack/react-router' {
 
 interface MainRouteChildren {
   MainGraphRoute: typeof MainGraphRoute
-  MainIndexRoute: typeof MainIndexRoute
+  MainChar123IdChar125Route: typeof MainChar123IdChar125Route
 }
 
 const MainRouteChildren: MainRouteChildren = {
   MainGraphRoute: MainGraphRoute,
-  MainIndexRoute: MainIndexRoute,
+  MainChar123IdChar125Route: MainChar123IdChar125Route,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)

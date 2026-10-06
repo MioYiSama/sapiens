@@ -1,5 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { EditIcon, OrbitIcon, PanelLeftCloseIcon, PanelLeftOpenIcon } from "lucide-react";
+import {
+  ChevronsUpDownIcon,
+  EditIcon,
+  EyeIcon,
+  LogOutIcon,
+  OrbitIcon,
+  PanelLeftCloseIcon,
+  PanelLeftOpenIcon,
+  SettingsIcon,
+} from "lucide-react";
 import { create } from "zustand/react";
 
 import { m } from "@/lib/paraglide/messages";
@@ -8,6 +17,13 @@ import { clamp } from "@/lib/utils";
 
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -187,13 +203,13 @@ function AppSidebarMain() {
   return (
     <>
       <SidebarGroup>
-        <SidebarGroupLabel>{m.conversation()}</SidebarGroupLabel>
+        <SidebarGroupLabel>{m.chat()}</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>
+              <SidebarMenuButton tooltip="EditIcon">
                 <EditIcon />
-                <span>TODO</span>
+                <span>EditIcon</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -205,9 +221,9 @@ function AppSidebarMain() {
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <EditIcon />
-                <span>TODO</span>
+              <SidebarMenuButton tooltip="EyeIcon">
+                <EyeIcon />
+                <span>EyeIcon</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -221,12 +237,30 @@ function AppSidebarFooter() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size="lg" tooltip={m.account_settings()}>
-          <Avatar>
-            <AvatarFallback>MY</AvatarFallback>
-          </Avatar>
-          <span>MioYi</span>
-        </SidebarMenuButton>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={(props) => (
+              <SidebarMenuButton {...props} size="lg" tooltip={m.account_settings()}>
+                <Avatar>
+                  <AvatarFallback>MY</AvatarFallback>
+                </Avatar>
+                <span>MioYi</span>
+                <ChevronsUpDownIcon className="ml-auto" />
+              </SidebarMenuButton>
+            )}
+          />
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <SettingsIcon />
+              <span>{m.settings()}</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive">
+              <LogOutIcon />
+              <span>{m.sign_out()}</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
   );

@@ -20,11 +20,11 @@ export const Route = createRootRoute({
   }),
   component() {
     return (
-      <html lang={getLocale()} className="size-full">
+      <html lang={getLocale()} className="size-full overflow-hidden">
         <head>
           <HeadContent />
         </head>
-        <body className="size-full">
+        <body className="size-full overflow-hidden">
           <TooltipProvider>
             <Outlet />
           </TooltipProvider>

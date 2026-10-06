@@ -1,5 +1,5 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
 import { PanelLeftOpenIcon } from "lucide-react";
 
 import AppSidebar, { AppSidebarProvider } from "@/components/AppSidebar";
@@ -25,6 +25,20 @@ export const Route = createFileRoute("/_main")({
 
 function Header() {
   const { toggleSidebar } = useSidebar();
+  const navigate = Route.useNavigate();
+  const location = useLocation();
+
+  const isGraph = location.pathname.includes("/graph");
+  const currentTab = isGraph ? "graph" : "conversation";
+
+  const handleTabChange = (value: string) => {
+    if (value === "graph") {
+      // 切换到 graph 路由
+      navigate({ to: "/graph" });
+    } else {
+      navigate({ to: "/" });
+    }
+  };
 
   return (
     <header className="flex w-full flex-row items-center p-2">
@@ -32,17 +46,18 @@ function Header() {
         <PanelLeftOpenIcon />
       </Button>
 
-      <Tabs defaultValue="conversation" className="mx-auto">
+      <Tabs value={currentTab} onValueChange={handleTabChange} className="mx-auto">
         <TabsList>
-          <TabsTrigger value="conversation">{m.conversation()}</TabsTrigger>
+          <TabsTrigger value="conversation">{m.chat()}</TabsTrigger>
           <TabsTrigger value="graph">{m.graph()}</TabsTrigger>
         </TabsList>
       </Tabs>
 
       <Button
         variant="ghost"
+        nativeButton={false}
         render={(props) => (
-          <a {...props} href="https://github.com/mioyisama/sapiens" target="_blank">
+          <a {...props} href="https://github.com/MioYiSama/sapiens" target="_blank">
             <SiGithub />
           </a>
         )}
