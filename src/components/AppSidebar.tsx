@@ -207,10 +207,15 @@ function AppSidebarMain() {
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="EditIcon">
-                <EditIcon />
-                <span>EditIcon</span>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                tooltip={m.new_chat()}
+                render={(props) => (
+                  <Link {...props} to="/">
+                    <EditIcon />
+                    <span>{m.new_chat()}</span>
+                  </Link>
+                )}
+              />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
@@ -225,6 +230,23 @@ function AppSidebarMain() {
                 <EyeIcon />
                 <span>EyeIcon</span>
               </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+        <SidebarGroupLabel>{m.conversation()}</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                render={(props) => (
+                  <Link {...props} to="/{-$id}" params={{ id: "test" }}>
+                    test
+                  </Link>
+                )}
+              />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
