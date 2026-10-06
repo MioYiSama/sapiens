@@ -25,4 +25,7 @@ export const auth = betterAuth({
     }),
     tanstackStartCookies(),
   ],
+  emailAndPassword: {
+    enabled: true,
+  },
 });

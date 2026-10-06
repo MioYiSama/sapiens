@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
   ChevronsUpDownIcon,
   EditIcon,
@@ -11,9 +11,11 @@ import {
 } from "lucide-react";
 import { create } from "zustand/react";
 
+import { authClient } from "@/lib/auth/client";
 import { m } from "@/lib/paraglide/messages";
 import { cn } from "@/lib/utils";
 import { clamp } from "@/lib/utils";
+import { Route } from "@/routes/_main";
 
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -256,6 +258,9 @@ function AppSidebarMain() {
 }
 
 function AppSidebarFooter() {
+  const { session } = Route.useRouteContext();
+  const navigate = useNavigate();
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -264,9 +269,9 @@ function AppSidebarFooter() {
             render={(props) => (
               <SidebarMenuButton {...props} size="lg" tooltip={m.account_settings()}>
                 <Avatar>
-                  <AvatarFallback>MY</AvatarFallback>
+                  <AvatarFallback>{session.user.name.substring(0, 2)}</AvatarFallback>
                 </Avatar>
-                <span>MioYi</span>
+                <span className="min-w-0 truncate">{session.user.name}</span>
                 <ChevronsUpDownIcon className="ml-auto" />
               </SidebarMenuButton>
             )}
@@ -277,7 +282,13 @@ function AppSidebarFooter() {
               <span>{m.settings()}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem variant="destructive">
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={async () => {
+                await authClient.signOut();
+                navigate({ to: "/signin" });
+              }}
+            >
               <LogOutIcon />
               <span>{m.sign_out()}</span>
             </DropdownMenuItem>

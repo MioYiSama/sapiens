@@ -1,14 +1,22 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useLocation } from "@tanstack/react-router";
 import { PanelLeftOpenIcon } from "lucide-react";
 
 import AppSidebar, { AppSidebarProvider } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getSession } from "@/lib/auth/functions";
 import { m } from "@/lib/paraglide/messages";
 
 export const Route = createFileRoute("/_main")({
+  async beforeLoad() {
+    const session = await getSession();
+    if (!session) {
+      throw redirect({ to: "/signin" });
+    }
+    return { session };
+  },
   component() {
     return (
       <AppSidebarProvider>
