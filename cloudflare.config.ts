@@ -17,6 +17,13 @@ export default defineConfig({
         id: "379a6408-bddc-4d8b-a3bd-b15f530eeedd",
         dev: { remote: false },
       }),
+      RATE_LIMITER: bindings.rateLimit({
+        namespace: "1001",
+        simple: {
+          limit: 20,
+          period: 10,
+        },
+      }),
       BETTER_AUTH_SECRET: bindings.secret(),
     },
   },
