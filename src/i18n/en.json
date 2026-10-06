@@ -2,6 +2,8 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "show_sidebar": "Show sidebar",
   "hide_sidebar": "Hide sidebar",
-  "conversation": "Conversation",
+  "conversation": "conversation",
+  "new_conversation": "New conversation",
+  "graph": "Graph",
   "account_settings": "Account settings"
 }

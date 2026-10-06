@@ -14,6 +14,7 @@
     "@better-auth/drizzle-adapter": "catalog:",
     "@better-auth/i18n": "catalog:",
     "@fontsource-variable/noto-sans": "catalog:",
+    "@icons-pack/react-simple-icons": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-start": "catalog:",
     "better-auth": "catalog:",
@@ -23,6 +24,7 @@
     "lucide-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-resizable-panels": "catalog:",
     "zod": "catalog:",
     "zustand": "catalog:"
   },

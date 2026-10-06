@@ -1,5 +1,6 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
+import NotFound from "@/components/NotFound";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getLocale } from "@/lib/paraglide/runtime";
 
@@ -19,20 +20,19 @@ export const Route = createRootRoute({
   }),
   component() {
     return (
-      <html lang={getLocale()}>
+      <html lang={getLocale()} className="size-full">
         <head>
           <HeadContent />
         </head>
-        <body>
+        <body className="size-full">
           <TooltipProvider>
             <Outlet />
           </TooltipProvider>
+
           <Scripts />
         </body>
       </html>
     );
   },
-  notFoundComponent() {
-    return <p>Not Found</p>;
-  },
+  notFoundComponent: NotFound,
 });
