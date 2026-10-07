@@ -1,0 +1,53 @@
+name: sapiens
+
+services:
+  app:
+    image: mioyisama/sapiens:latest
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      platforms:
+        - linux/amd64
+
+    container_name: sapiens
+    depends_on:
+      - db
+    environment:
+      BETTER_AUTH_URL: http://localhost:3000
+      # openssl rand -hex 32
+      BETTER_AUTH_SECRET: c30352e80eb8422ec4be3d07821c80db3409abb4c1c4b78b519814c662d0d2e7
+      # postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&...]
+      DATABASE_URL: postgresql://sapiens:sapiens@sapiens-db:5432/sapiens
+
+    networks:
+      - sapiens
+    ports:
+      - 3000:3000
+
+  db:
+    image: postgres:alpine
+
+    container_name: sapiens-db
+    environment:
+      POSTGRES_USER: sapiens
+      POSTGRES_DB: sapiens
+      POSTGRES_PASSWORD: sapiens
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sapiens -d sapiens"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+    networks:
+      - sapiens
+
+    volumes:
+      - data:/var/lib/postgresql
+
+networks:
+  sapiens:
+    name: sapiens
+
+volumes:
+  data:
+    name: sapiens-data

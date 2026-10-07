@@ -1,10 +1,10 @@
-import Anthropic from "@lobehub/icons-static-svg/icons/anthropic.svg?react";
 import { fetchServerSentEvents, useChat } from "@tanstack/ai-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { cn } from "cn";
 import { PlusIcon, SendIcon } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 
+import { AnthropicIcon, GoogleIcon, OpenAiIcon } from "@/components/icons";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import {
   DropdownMenu,
@@ -45,7 +45,9 @@ export const Route = createFileRoute("/_main/{-$id}")({
             <Bubble align="start">
               <BubbleContent>
                 id is "{id}" ({typeof id})
-                <Anthropic />
+                <AnthropicIcon />
+                <GoogleIcon />
+                <OpenAiIcon />
               </BubbleContent>
             </Bubble>
 

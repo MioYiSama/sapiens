@@ -1,8 +1,8 @@
-import GitHub from "@lobehub/icons-static-svg/icons/github.svg?react";
 import { createFileRoute, Outlet, redirect, useLocation } from "@tanstack/react-router";
 import { PanelLeftOpenIcon } from "lucide-react";
 
 import AppSidebar, { AppSidebarProvider } from "@/components/AppSidebar";
+import { GitHubIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -66,7 +66,7 @@ function Header() {
         nativeButton={false}
         render={(props) => (
           <a {...props} href="https://github.com/MioYiSama/sapiens" target="_blank">
-            <GitHub />
+            <GitHubIcon />
           </a>
         )}
       />

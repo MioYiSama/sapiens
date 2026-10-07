@@ -3,6 +3,7 @@ allowBuilds:
   esbuild: true
   protobufjs: true
   workerd: true
+minimumReleaseAge: 0
 
 catalogMode: strict
 catalog:

@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "auth:schema": "vpx auth@latest generate --config src/lib/auth/server.ts --output src/lib/db -y",
-    "db:migrate": "drizzle-kit push"
+    "build:docker": "docker compose -f docker/docker-compose.yaml build app",
+    "release:docker": "docker push mioyisama/sapiens:latest",
+    "deploy:docker": "docker compose -f docker/docker-compose.yaml up",
+    "auth:schema": "vpx auth@latest generate --config src/lib/auth/server.ts --output src/lib/db -y"
   },
   "dependencies": {
     "@base-ui/react": "catalog:",
