@@ -18,5 +18,6 @@
   "sign_in": "登录",
   "sign_out": "登出",
   "sign_up": "注册",
-  "welcome": "今天想聊点什么？"
+  "welcome": "今天想聊点什么？",
+  "no_conversations": "暂无对话"
 }

@@ -4,7 +4,7 @@
   "add_attachment": "Add attachment",
   "auth_error": "Auth failed",
   "chat": "Chat",
-  "conversation": "conversation",
+  "conversation": "Conversation",
   "email": "Email",
   "graph": "Graph",
   "hide_sidebar": "Hide sidebar",
@@ -18,5 +18,6 @@
   "sign_in": "Sign In",
   "sign_out": "Sign Out",
   "sign_up": "Sign Up",
-  "welcome": "What would you like to chat today?"
+  "welcome": "What would you like to chat today?",
+  "no_conversations": "No conversations yet"
 }

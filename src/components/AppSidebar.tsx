@@ -2,7 +2,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import {
   ChevronsUpDownIcon,
   EditIcon,
-  EyeIcon,
   LogOutIcon,
   OrbitIcon,
   PanelLeftCloseIcon,
@@ -10,6 +9,7 @@ import {
   SettingsIcon,
 } from "lucide-react";
 import { create } from "zustand/react";
+import { useShallow } from "zustand/react/shallow";
 
 import { authClient } from "@/lib/auth/client";
 import { m } from "@/lib/paraglide/messages";
@@ -26,6 +26,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Empty, EmptyDescription, EmptyHeader } from "./ui/empty";
 import {
   Sidebar,
   SidebarContent,
@@ -52,43 +53,43 @@ type SidebarState = {
   triggerTransition(duration?: number): void;
 };
 
-let transitionTimer: ReturnType<typeof setTimeout> | null = null;
+const useSidebarStore = create<SidebarState>()((set) => {
+  let transitionTimer: ReturnType<typeof setTimeout> | null = null;
 
-const useSidebarStore = create<SidebarState>()((set) => ({
-  width: 256,
-  setWidth(value) {
-    set({ width: value });
-  },
-  dragging: false,
-  setDragging(value) {
-    set({ dragging: value });
-  },
-  transitioning: false,
-  triggerTransition(duration = 150) {
-    if (transitionTimer) clearTimeout(transitionTimer);
+  return {
+    width: 256,
+    setWidth(value) {
+      set({ width: value });
+    },
+    dragging: false,
+    setDragging(value) {
+      set({ dragging: value });
+    },
+    transitioning: false,
+    triggerTransition(duration = 150) {
+      if (transitionTimer) clearTimeout(transitionTimer);
 
-    set({ transitioning: true });
+      set({ transitioning: true });
 
-    transitionTimer = setTimeout(() => {
-      set({ transitioning: false });
-    }, duration);
-  },
-}));
+      transitionTimer = setTimeout(() => {
+        set({ transitioning: false });
+      }, duration);
+    },
+  };
+});
 
 export function AppSidebarProvider({ children }: { children: React.ReactNode }) {
-  const { width, dragging, transitioning } = useSidebarStore();
+  const { width, disableTransition } = useSidebarStore(
+    useShallow((state) => ({
+      width: state.width,
+      disableTransition: state.dragging && !state.transitioning,
+    })),
+  );
 
   return (
     <SidebarProvider
-      className={cn(
-        "size-full **:duration-150",
-        dragging && !transitioning && "**:transition-none",
-      )}
-      style={
-        {
-          "--sidebar-width": `${width}px`,
-        } as React.CSSProperties
-      }
+      style={{ "--sidebar-width": `${width}px` } as React.CSSProperties}
+      className={cn("size-full **:duration-150", disableTransition && "**:transition-none")}
     >
       {children}
     </SidebarProvider>
@@ -96,6 +97,8 @@ export function AppSidebarProvider({ children }: { children: React.ReactNode }) 
 }
 
 export default function AppSidebar() {
+  const { isMobile } = useSidebar();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -110,7 +113,7 @@ export default function AppSidebar() {
         <AppSidebarFooter />
       </SidebarFooter>
 
-      <AppSidebarRail />
+      {!isMobile && <AppSidebarRail />}
     </Sidebar>
   );
 }
@@ -119,16 +122,23 @@ function AppSidebarRail() {
   const { setWidth, dragging, setDragging, transitioning, triggerTransition } = useSidebarStore();
   const { open, toggleSidebar } = useSidebar();
 
+  function finalize() {
+    setDragging(false);
+  }
+
   return (
     <SidebarRail
+      className="touch-none select-none"
       onClick={undefined}
+      onPointerUp={finalize}
+      onPointerCancel={finalize}
+      onLostPointerCapture={finalize}
       onPointerDown={(e) => {
-        setDragging(true);
+        if (!e.isPrimary || e.button !== 0 || dragging) return;
+
+        e.preventDefault();
         e.currentTarget.setPointerCapture(e.pointerId);
-      }}
-      onPointerUp={(e) => {
-        setDragging(false);
-        e.currentTarget.releasePointerCapture(e.pointerId);
+        setDragging(true);
       }}
       onPointerMove={(e) => {
         if (!dragging) return;
@@ -226,14 +236,7 @@ function AppSidebarMain() {
       <SidebarGroup>
         <SidebarGroupLabel>{m.graph()}</SidebarGroupLabel>
         <SidebarGroupContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton tooltip="EyeIcon">
-                <EyeIcon />
-                <span>EyeIcon</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <SidebarMenu>{/* TODO */}</SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
 
@@ -242,13 +245,11 @@ function AppSidebarMain() {
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                render={(props) => (
-                  <Link {...props} to="/{-$id}" params={{ id: "test" }}>
-                    test
-                  </Link>
-                )}
-              />
+              <Empty>
+                <EmptyHeader>
+                  <EmptyDescription className="truncate">{m.no_conversations()}</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
@@ -271,13 +272,21 @@ function AppSidebarFooter() {
                 <Avatar>
                   <AvatarFallback>{session.user.name.substring(0, 2)}</AvatarFallback>
                 </Avatar>
-                <span className="min-w-0 truncate">{session.user.name}</span>
+
+                <div className="flex min-w-0 flex-col leading-tight">
+                  <span className="truncate">{session.user.name}</span>
+                  <span className="text-muted-foreground truncate text-xs">
+                    {session.user.email}
+                  </span>
+                </div>
+
                 <ChevronsUpDownIcon className="ml-auto" />
               </SidebarMenuButton>
             )}
           />
           <DropdownMenuContent>
             <DropdownMenuItem>
+              {/* TODO */}
               <SettingsIcon />
               <span>{m.settings()}</span>
             </DropdownMenuItem>

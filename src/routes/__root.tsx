@@ -1,10 +1,8 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
-import NotFound from "@/components/NotFound";
 import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getLocale } from "@/lib/paraglide/runtime";
-import { configureZodLocale } from "@/lib/utils";
 
 import css from "@/index.css?url";
 
@@ -20,25 +18,31 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: css },
     ],
   }),
-  component() {
-    configureZodLocale();
-
+  shellComponent({ children }) {
     return (
       <html lang={getLocale()} className="size-full overflow-hidden">
         <head>
           <HeadContent />
         </head>
         <body className="size-full overflow-hidden">
-          <TooltipProvider>
-            <Outlet />
-          </TooltipProvider>
-
-          <Toaster />
-
+          {children}
           <Scripts />
         </body>
       </html>
     );
   },
-  notFoundComponent: NotFound,
+  component() {
+    return (
+      <>
+        <TooltipProvider>
+          <Outlet />
+        </TooltipProvider>
+
+        <Toaster />
+      </>
+    );
+  },
+  notFoundComponent() {
+    return <p>Not Found</p>;
+  },
 });

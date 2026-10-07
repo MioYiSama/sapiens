@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useMatchRoute } from "@tanstack/react-router";
 import { PanelLeftOpenIcon } from "lucide-react";
 
 import AppSidebar, { AppSidebarProvider } from "@/components/AppSidebar";
@@ -12,9 +12,11 @@ import { m } from "@/lib/paraglide/messages";
 export const Route = createFileRoute("/_main")({
   async beforeLoad() {
     const session = await getSession();
+
     if (!session) {
       throw redirect({ to: "/signin" });
     }
+
     return { session };
   },
   component() {
@@ -22,7 +24,7 @@ export const Route = createFileRoute("/_main")({
       <AppSidebarProvider>
         <AppSidebar />
 
-        <div className="flex size-full grow flex-col">
+        <div className="flex size-full flex-col">
           <Header />
           <Outlet />
         </div>
@@ -34,18 +36,11 @@ export const Route = createFileRoute("/_main")({
 function Header() {
   const { toggleSidebar } = useSidebar();
   const navigate = Route.useNavigate();
-  const location = useLocation();
+  const matchRoute = useMatchRoute();
 
-  const isGraph = location.pathname.includes("/graph");
-  const currentTab = isGraph ? "graph" : "conversation";
-
+  const currentTab = matchRoute({ to: "/graph" }) ? "graph" : "conversation";
   const handleTabChange = (value: string) => {
-    if (value === "graph") {
-      // 切换到 graph 路由
-      navigate({ to: "/graph" });
-    } else {
-      navigate({ to: "/" });
-    }
+    navigate({ to: value === "graph" ? "/graph" : "/" });
   };
 
   return (

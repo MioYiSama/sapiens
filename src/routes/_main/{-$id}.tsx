@@ -1,8 +1,10 @@
 import { fetchServerSentEvents, useChat } from "@tanstack/ai-react";
+import { useHotkey } from "@tanstack/react-hotkeys";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { cn } from "cn";
 import { PlusIcon, SendIcon } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
+import * as z from "zod";
 
 import { AnthropicIcon, GoogleIcon, OpenAiIcon } from "@/components/icons";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
@@ -23,8 +25,23 @@ import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { m } from "@/lib/paraglide/messages";
 
+const ParamsSchema = z.object({
+  id: z.uuid().optional(),
+});
+
 export const Route = createFileRoute("/_main/{-$id}")({
+  params: {
+    parse(params) {
+      const { success, data } = ParamsSchema.safeParse(params);
+      return success ? data : false;
+    },
+  },
+  loader() {
+    return { uuid: crypto.randomUUID() };
+  },
   component() {
+    const { uuid } = Route.useLoaderData();
+
     const { id } = Route.useParams();
 
     if (id === undefined) {
@@ -32,6 +49,9 @@ export const Route = createFileRoute("/_main/{-$id}")({
         <main className="flex size-full flex-col items-center p-4">
           <div className="flex size-full max-w-xl flex-col items-center justify-center gap-6">
             <h1 className="text-xl">{m.welcome()}</h1>
+            <Link to="/{-$id}" params={{ id: uuid }}>
+              {uuid}
+            </Link>
             <ChatInput />
           </div>
         </main>
@@ -74,6 +94,10 @@ export const Route = createFileRoute("/_main/{-$id}")({
 });
 
 function ChatInput() {
+  useHotkey("Mod+Enter", () => {
+    alert(1);
+  });
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [multiline, setMultiline] = useState(false);
   const navigate = Route.useNavigate();

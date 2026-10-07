@@ -1,9 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_main/graph")({
-  component: RouteComponent,
+  component() {
+    return <div>Hello "/_main/graph"!</div>;
+  },
 });
-
-function RouteComponent() {
-  return <div>Hello "/_main/graph"!</div>;
-}

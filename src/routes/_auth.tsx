@@ -11,6 +11,12 @@ export const Route = createFileRoute("/_auth")({
     }
   },
   component() {
-    return <Outlet />;
+    return (
+      <div className="flex size-full items-center justify-center">
+        <div className="w-xs">
+          <Outlet />
+        </div>
+      </div>
+    );
   },
 });

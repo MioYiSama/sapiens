@@ -9,10 +9,7 @@ export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-let configured = false;
 export function configureZodLocale() {
-  if (configured) return;
-
   switch (getLocale()) {
     case "en":
       z.config(en());
@@ -21,6 +18,4 @@ export function configureZodLocale() {
       z.config(zhCN());
       break;
   }
-
-  configured = true;
 }

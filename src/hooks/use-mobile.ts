@@ -1,22 +1,19 @@
 import { useSyncExternalStore } from "react";
 
-const MOBILE_BREAKPOINT = 768;
-const QUERY = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`;
-
-function subscribe(callback: () => void) {
-  const mql = window.matchMedia(QUERY);
-  mql.addEventListener("change", callback);
-  return () => mql.removeEventListener("change", callback);
-}
-
-function getSnapshot() {
-  return window.matchMedia(QUERY).matches;
-}
-
-function getServerSnapshot() {
-  return false; // SSR 服务端渲染时的默认兜底值
+function query() {
+  return window.matchMedia("(max-width: 768px)");
 }
 
 export function useIsMobile() {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  return useSyncExternalStore(
+    (callback) => {
+      const q = query();
+
+      q.addEventListener("change", callback);
+
+      return () => q.removeEventListener("change", callback);
+    },
+    () => query().matches,
+    () => false,
+  );
 }
