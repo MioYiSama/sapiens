@@ -1,419 +1,604 @@
 {
-  "version": "7",
-  "dialect": "sqlite",
-  "id": "541c9064-af7b-453a-81f6-ed2aa0f397e1",
+  "version": "8",
+  "dialect": "postgres",
+  "id": "a375937e-2d52-4cd6-b1fb-fc36eaba75d0",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
+      "isRlsEnabled": false,
       "name": "category",
-      "entityType": "tables"
+      "entityType": "tables",
+      "schema": "public"
     },
     {
+      "isRlsEnabled": false,
       "name": "account",
-      "entityType": "tables"
+      "entityType": "tables",
+      "schema": "public"
     },
     {
+      "isRlsEnabled": false,
       "name": "session",
-      "entityType": "tables"
+      "entityType": "tables",
+      "schema": "public"
     },
     {
+      "isRlsEnabled": false,
       "name": "user",
-      "entityType": "tables"
+      "entityType": "tables",
+      "schema": "public"
     },
     {
+      "isRlsEnabled": false,
       "name": "verification",
-      "entityType": "tables"
+      "entityType": "tables",
+      "schema": "public"
     },
     {
-      "type": "integer",
-      "notNull": false,
-      "autoincrement": true,
-      "default": null,
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "uuidv7()",
       "generated": null,
+      "identity": null,
       "name": "id",
       "entityType": "columns",
+      "schema": "public",
       "table": "category"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "name",
       "entityType": "columns",
+      "schema": "public",
       "table": "category"
     },
     {
       "type": "text",
-      "notNull": false,
-      "autoincrement": false,
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "id",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "account_id",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "provider_id",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "user_id",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "access_token",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "refresh_token",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "id_token",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "access_token_expires_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "refresh_token_expires_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "scope",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "password",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
-      "default": "(cast(unixepoch('subsecond') * 1000 as integer))",
+      "dimensions": 0,
+      "default": "now()",
       "generated": null,
+      "identity": null,
       "name": "created_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "updated_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "account"
     },
     {
       "type": "text",
-      "notNull": false,
-      "autoincrement": false,
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "id",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "expires_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "token",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
-      "default": "(cast(unixepoch('subsecond') * 1000 as integer))",
+      "dimensions": 0,
+      "default": "now()",
       "generated": null,
+      "identity": null,
       "name": "created_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "updated_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "ip_address",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "user_agent",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "user_id",
       "entityType": "columns",
+      "schema": "public",
       "table": "session"
     },
     {
       "type": "text",
-      "notNull": false,
-      "autoincrement": false,
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "id",
       "entityType": "columns",
+      "schema": "public",
       "table": "user"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "name",
       "entityType": "columns",
+      "schema": "public",
       "table": "user"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "email",
       "entityType": "columns",
+      "schema": "public",
       "table": "user"
     },
     {
-      "type": "integer",
+      "type": "boolean",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": "false",
       "generated": null,
+      "identity": null,
       "name": "email_verified",
       "entityType": "columns",
+      "schema": "public",
       "table": "user"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": false,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "image",
       "entityType": "columns",
+      "schema": "public",
       "table": "user"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
-      "default": "(cast(unixepoch('subsecond') * 1000 as integer))",
+      "dimensions": 0,
+      "default": "now()",
       "generated": null,
+      "identity": null,
       "name": "created_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "user"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
-      "default": "(cast(unixepoch('subsecond') * 1000 as integer))",
+      "dimensions": 0,
+      "default": "now()",
       "generated": null,
+      "identity": null,
       "name": "updated_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "user"
     },
     {
       "type": "text",
-      "notNull": false,
-      "autoincrement": false,
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "id",
       "entityType": "columns",
+      "schema": "public",
       "table": "verification"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "identifier",
       "entityType": "columns",
+      "schema": "public",
       "table": "verification"
     },
     {
       "type": "text",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "value",
       "entityType": "columns",
+      "schema": "public",
       "table": "verification"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
+      "dimensions": 0,
       "default": null,
       "generated": null,
+      "identity": null,
       "name": "expires_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "verification"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
-      "default": "(cast(unixepoch('subsecond') * 1000 as integer))",
+      "dimensions": 0,
+      "default": "now()",
       "generated": null,
+      "identity": null,
       "name": "created_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "verification"
     },
     {
-      "type": "integer",
+      "type": "timestamp",
+      "typeSchema": null,
       "notNull": true,
-      "autoincrement": false,
-      "default": "(cast(unixepoch('subsecond') * 1000 as integer))",
+      "dimensions": 0,
+      "default": "now()",
       "generated": null,
+      "identity": null,
       "name": "updated_at",
       "entityType": "columns",
+      "schema": "public",
       "table": "verification"
     },
     {
+      "nameExplicit": true,
       "columns": [
-        "user_id"
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
       ],
-      "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "nameExplicit": false,
-      "name": "fk_account_user_id_user_id_fk",
-      "entityType": "fks",
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "account_userId_idx",
+      "entityType": "indexes",
+      "schema": "public",
       "table": "account"
     },
     {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "session_userId_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "session"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "identifier",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "verification_identifier_idx",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "verification"
+    },
+    {
+      "nameExplicit": false,
       "columns": [
         "user_id"
       ],
+      "schemaTo": "public",
       "tableTo": "user",
       "columnsTo": [
         "id"
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "nameExplicit": false,
-      "name": "fk_session_user_id_user_id_fk",
+      "name": "account_user_id_user_id_fkey",
       "entityType": "fks",
+      "schema": "public",
+      "table": "account"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "session_user_id_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
       "table": "session"
     },
     {
@@ -421,7 +606,8 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "category_pk",
+      "name": "category_pkey",
+      "schema": "public",
       "table": "category",
       "entityType": "pks"
     },
@@ -430,7 +616,8 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "account_pk",
+      "name": "account_pkey",
+      "schema": "public",
       "table": "account",
       "entityType": "pks"
     },
@@ -439,7 +626,8 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "session_pk",
+      "name": "session_pkey",
+      "schema": "public",
       "table": "session",
       "entityType": "pks"
     },
@@ -448,7 +636,8 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "user_pk",
+      "name": "user_pkey",
+      "schema": "public",
       "table": "user",
       "entityType": "pks"
     },
@@ -457,69 +646,32 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "verification_pk",
+      "name": "verification_pkey",
+      "schema": "public",
       "table": "verification",
       "entityType": "pks"
     },
     {
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "origin": "manual",
-      "name": "account_userId_idx",
-      "entityType": "indexes",
-      "table": "account"
-    },
-    {
-      "columns": [
-        {
-          "value": "user_id",
-          "isExpression": false
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "origin": "manual",
-      "name": "session_userId_idx",
-      "entityType": "indexes",
-      "table": "session"
-    },
-    {
-      "columns": [
-        {
-          "value": "identifier",
-          "isExpression": false
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "origin": "manual",
-      "name": "verification_identifier_idx",
-      "entityType": "indexes",
-      "table": "verification"
-    },
-    {
+      "nameExplicit": false,
       "columns": [
         "token"
       ],
-      "nameExplicit": false,
-      "name": "session_token_unique",
-      "entityType": "uniques",
-      "table": "session"
+      "nullsNotDistinct": false,
+      "name": "session_token_key",
+      "schema": "public",
+      "table": "session",
+      "entityType": "uniques"
     },
     {
+      "nameExplicit": false,
       "columns": [
         "email"
       ],
-      "nameExplicit": false,
-      "name": "user_email_unique",
-      "entityType": "uniques",
-      "table": "user"
+      "nullsNotDistinct": false,
+      "name": "user_email_key",
+      "schema": "public",
+      "table": "user",
+      "entityType": "uniques"
     }
   ],
   "renames": []

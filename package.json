@@ -4,17 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "deploy": "cf deploy --secrets-file .env.production",
     "auth:schema": "vpx auth@latest generate --config src/lib/auth/server.ts --output src/lib/db -y",
-    "db:migrate": "drizzle-kit push",
-    "db:deploy": "cf d1 migrations apply 379a6408-bddc-4d8b-a3bd-b15f530eeedd --dir drizzle --pattern drizzle/*/migration.sql"
+    "db:migrate": "drizzle-kit push"
   },
   "dependencies": {
     "@base-ui/react": "catalog:",
     "@better-auth/drizzle-adapter": "catalog:",
     "@better-auth/i18n": "catalog:",
     "@fontsource-variable/noto-sans": "catalog:",
-    "@icons-pack/react-simple-icons": "catalog:",
+    "@lobehub/icons-static-svg": "catalog:",
+    "@tanstack/ai": "catalog:",
+    "@tanstack/ai-anthropic": "catalog:",
+    "@tanstack/ai-gemini": "catalog:",
+    "@tanstack/ai-openai": "catalog:",
+    "@tanstack/ai-react": "catalog:",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-start": "catalog:",
@@ -23,33 +26,35 @@
     "cn": "catalog:",
     "drizzle-orm": "catalog:",
     "lucide-react": "catalog:",
+    "pg": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-resizable-panels": "catalog:",
+    "srvx": "catalog:",
     "zod": "catalog:",
     "zustand": "catalog:"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "catalog:",
     "@inlang/paraglide-js": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
-    "cf": "catalog:",
+    "dotenv": "catalog:",
     "drizzle-kit": "catalog:",
+    "nitro": "catalog:",
     "oxc-transform-react": "catalog:",
     "shadcn": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
+    "vite-plugin-svgr": "catalog:",
     "vite-plus": "catalog:"
   },
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "11.28.4",
+      "version": "11.28.5",
       "onFail": "download"
     },
     "runtime": {

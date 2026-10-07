@@ -1,3 +1,5 @@
+import Anthropic from "@lobehub/icons-static-svg/icons/anthropic.svg?react";
+import { fetchServerSentEvents, useChat } from "@tanstack/ai-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { cn } from "cn";
 import { PlusIcon, SendIcon } from "lucide-react";
@@ -17,6 +19,7 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { m } from "@/lib/paraglide/messages";
 
@@ -42,6 +45,7 @@ export const Route = createFileRoute("/_main/{-$id}")({
             <Bubble align="start">
               <BubbleContent>
                 id is "{id}" ({typeof id})
+                <Anthropic />
               </BubbleContent>
             </Bubble>
 
@@ -70,6 +74,21 @@ export const Route = createFileRoute("/_main/{-$id}")({
 function ChatInput() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [multiline, setMultiline] = useState(false);
+  const navigate = Route.useNavigate();
+
+  const { id } = Route.useParams();
+
+  const { messages, sendMessage } = useChat({
+    connection: fetchServerSentEvents("/api/chat"),
+    threadId: id,
+    onError(error) {
+      toast.add({
+        type: "error",
+        title: "Error",
+        description: error.message,
+      });
+    },
+  });
 
   useLayoutEffect(() => {
     const textarea = textareaRef.current;
@@ -134,6 +153,10 @@ function ChatInput() {
             variant="default"
             size="icon-sm"
             className={cn("rounded-full", multiline && "ml-auto")}
+            onClick={async () => {
+              await sendMessage(textareaRef.current!.value);
+              textareaRef.current!.value = "";
+            }}
           >
             <SendIcon />
           </InputGroupButton>

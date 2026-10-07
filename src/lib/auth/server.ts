@@ -2,16 +2,15 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { i18n, locales } from "@better-auth/i18n";
 import { betterAuth } from "better-auth/minimal";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { env } from "cloudflare:workers";
 
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/auth-schema";
 
 export const auth = betterAuth({
   baseURL: import.meta.env.VITE_BETTER_AUTH_URL,
-  secret: env.BETTER_AUTH_SECRET,
+  secret: process.env.BETTER_AUTH_SECRET!,
   database: drizzleAdapter(db, {
-    provider: "sqlite",
+    provider: "pg",
     schema,
   }),
   advanced: { database: { joins: true } },

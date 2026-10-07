@@ -1,8 +1,9 @@
-import { cloudflare } from "@cloudflare/vite-plugin";
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
+import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vite-plus";
 
 const ignorePatterns = [
@@ -26,9 +27,23 @@ export default defineConfig({
       emitTsDeclarations: true,
       strategy: ["preferredLanguage", "baseLocale"],
     }),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
+    nitro({
+      preset: "node-server",
+      output: { dir: "dist" },
+    }),
+    svgr(),
   ],
   resolve: { tsconfigPaths: true },
+  build: {
+    rolldownOptions: {
+      onLog(level, log, handler) {
+        // Suppress "use client" warning
+        if (log.code === "MODULE_LEVEL_DIRECTIVE") return;
+
+        return handler(level, log);
+      },
+    },
+  },
   lint: {
     ignorePatterns,
     options: { typeAware: true, typeCheck: true },

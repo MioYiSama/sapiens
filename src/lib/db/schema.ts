@@ -1,8 +1,10 @@
-import { defineRelations } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { defineRelations, sql } from "drizzle-orm";
+import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 
-export const categoryTable = sqliteTable("category", {
-  id: integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
+export const categoryTable = pgTable("category", {
+  id: uuid()
+    .default(sql`uuidv7()`)
+    .primaryKey(),
   name: text().notNull(),
 });
 

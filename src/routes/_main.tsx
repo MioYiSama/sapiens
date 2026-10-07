@@ -1,4 +1,4 @@
-import { SiGithub } from "@icons-pack/react-simple-icons";
+import GitHub from "@lobehub/icons-static-svg/icons/github.svg?react";
 import { createFileRoute, Outlet, redirect, useLocation } from "@tanstack/react-router";
 import { PanelLeftOpenIcon } from "lucide-react";
 
@@ -66,7 +66,7 @@ function Header() {
         nativeButton={false}
         render={(props) => (
           <a {...props} href="https://github.com/MioYiSama/sapiens" target="_blank">
-            <SiGithub />
+            <GitHub />
           </a>
         )}
       />
