@@ -6,6 +6,8 @@ import { nitro } from "nitro/vite";
 import svgr from "vite-plugin-svgr";
 import { defineConfig } from "vite-plus";
 
+import pkg from "./package.json";
+
 const ignorePatterns = [
   "drizzle",
   "src/routeTree.gen.ts",
@@ -34,6 +36,10 @@ export default defineConfig({
     svgr(),
   ],
   resolve: { tsconfigPaths: true },
+  define: {
+    __VERSION__: JSON.stringify(pkg.version),
+    __REPOSITORY_URL__: JSON.stringify(pkg.repository.url),
+  },
   build: {
     rolldownOptions: {
       onLog(level, log, handler) {
@@ -53,6 +59,8 @@ export default defineConfig({
     ignorePatterns,
     sortImports: true,
     sortPackageJson: true,
-    sortTailwindcss: true,
+    sortTailwindcss: {
+      functions: ["cn"],
+    },
   },
 });

@@ -11,11 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as MainRouteImport } from './routes/_main'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as AuthSigninRouteImport } from './routes/_auth/signin'
 import { Route as AuthSignupRouteImport } from './routes/_auth/signup'
 import { Route as MainGraphRouteImport } from './routes/_main/graph'
 import { Route as MainChar123IdChar125RouteImport } from './routes/_main/{-$id}'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as SettingsAboutRouteImport } from './routes/settings/about'
+import { Route as SettingsApiKeyRouteImport } from './routes/settings/api-key'
+import { Route as SettingsModelRouteImport } from './routes/settings/model'
+import { Route as SettingsProviderRouteImport } from './routes/settings/provider'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const AuthRoute = AuthRouteImport.update({
@@ -24,6 +30,11 @@ const AuthRoute = AuthRouteImport.update({
 } as any)
 const MainRoute = MainRouteImport.update({
   id: '/_main',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSigninRoute = AuthSigninRouteImport.update({
@@ -51,6 +62,31 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsAboutRoute = SettingsAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsApiKeyRoute = SettingsApiKeyRouteImport.update({
+  id: '/api-key',
+  path: '/api-key',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsModelRoute = SettingsModelRouteImport.update({
+  id: '/model',
+  path: '/model',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsProviderRoute = SettingsProviderRouteImport.update({
+  id: '/provider',
+  path: '/provider',
+  getParentRoute: () => SettingsRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -59,11 +95,17 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof MainRouteWithChildren
+  '/settings': typeof SettingsRouteWithChildren
   '/signin': typeof AuthSigninRoute
   '/signup': typeof AuthSignupRoute
   '/graph': typeof MainGraphRoute
   '/{-$id}': typeof MainChar123IdChar125Route
   '/api/chat': typeof ApiChatRoute
+  '/settings/about': typeof SettingsAboutRoute
+  '/settings/api-key': typeof SettingsApiKeyRoute
+  '/settings/model': typeof SettingsModelRoute
+  '/settings/provider': typeof SettingsProviderRoute
+  '/settings/': typeof SettingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -73,28 +115,45 @@ export interface FileRoutesByTo {
   '/graph': typeof MainGraphRoute
   '/{-$id}': typeof MainChar123IdChar125Route
   '/api/chat': typeof ApiChatRoute
+  '/settings/about': typeof SettingsAboutRoute
+  '/settings/api-key': typeof SettingsApiKeyRoute
+  '/settings/model': typeof SettingsModelRoute
+  '/settings/provider': typeof SettingsProviderRoute
+  '/settings': typeof SettingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
   '/_main': typeof MainRouteWithChildren
+  '/settings': typeof SettingsRouteWithChildren
   '/_auth/signin': typeof AuthSigninRoute
   '/_auth/signup': typeof AuthSignupRoute
   '/_main/graph': typeof MainGraphRoute
   '/_main/{-$id}': typeof MainChar123IdChar125Route
   '/api/chat': typeof ApiChatRoute
+  '/settings/about': typeof SettingsAboutRoute
+  '/settings/api-key': typeof SettingsApiKeyRoute
+  '/settings/model': typeof SettingsModelRoute
+  '/settings/provider': typeof SettingsProviderRoute
+  '/settings/': typeof SettingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/settings'
     | '/signin'
     | '/signup'
     | '/graph'
     | '/{-$id}'
     | '/api/chat'
+    | '/settings/about'
+    | '/settings/api-key'
+    | '/settings/model'
+    | '/settings/provider'
+    | '/settings/'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -104,22 +163,34 @@ export interface FileRouteTypes {
     | '/graph'
     | '/{-$id}'
     | '/api/chat'
+    | '/settings/about'
+    | '/settings/api-key'
+    | '/settings/model'
+    | '/settings/provider'
+    | '/settings'
     | '/api/auth/$'
   id:
     | '__root__'
     | '/_auth'
     | '/_main'
+    | '/settings'
     | '/_auth/signin'
     | '/_auth/signup'
     | '/_main/graph'
     | '/_main/{-$id}'
     | '/api/chat'
+    | '/settings/about'
+    | '/settings/api-key'
+    | '/settings/model'
+    | '/settings/provider'
+    | '/settings/'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   MainRoute: typeof MainRouteWithChildren
+  SettingsRoute: typeof SettingsRouteWithChildren
   ApiChatRoute: typeof ApiChatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -138,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof MainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/signin': {
@@ -175,6 +253,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings/': {
+      id: '/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/about': {
+      id: '/settings/about'
+      path: '/about'
+      fullPath: '/settings/about'
+      preLoaderRoute: typeof SettingsAboutRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/api-key': {
+      id: '/settings/api-key'
+      path: '/api-key'
+      fullPath: '/settings/api-key'
+      preLoaderRoute: typeof SettingsApiKeyRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/model': {
+      id: '/settings/model'
+      path: '/model'
+      fullPath: '/settings/model'
+      preLoaderRoute: typeof SettingsModelRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/provider': {
+      id: '/settings/provider'
+      path: '/provider'
+      fullPath: '/settings/provider'
+      preLoaderRoute: typeof SettingsProviderRouteImport
+      parentRoute: typeof SettingsRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -209,9 +322,30 @@ const MainRouteChildren: MainRouteChildren = {
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 
+interface SettingsRouteChildren {
+  SettingsAboutRoute: typeof SettingsAboutRoute
+  SettingsApiKeyRoute: typeof SettingsApiKeyRoute
+  SettingsModelRoute: typeof SettingsModelRoute
+  SettingsProviderRoute: typeof SettingsProviderRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+}
+
+const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsAboutRoute: SettingsAboutRoute,
+  SettingsApiKeyRoute: SettingsApiKeyRoute,
+  SettingsModelRoute: SettingsModelRoute,
+  SettingsProviderRoute: SettingsProviderRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+}
+
+const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
+  SettingsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   MainRoute: MainRouteWithChildren,
+  SettingsRoute: SettingsRouteWithChildren,
   ApiChatRoute: ApiChatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

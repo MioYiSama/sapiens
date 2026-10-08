@@ -1,23 +1,58 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
+  "about": "About",
   "account_settings": "Account settings",
   "add_attachment": "Add attachment",
-  "auth_error": "Auth failed",
+  "add_image": "Add image",
+  "ai": "AI",
+  "api_key": "API key",
+  "appearance": "Appearance",
+  "avatar": "Avatar",
+  "avatar_size_limit": "The file size of the avatar can not exceed {size}",
   "chat": "Chat",
+  "clear": "Clear",
+  "common": "Common",
   "conversation": "Conversation",
+  "default_model": "Default model",
   "email": "Email",
+  "repository": "Source repository",
+  "add": "Add",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "delete_api_key_alert": "Are you sure to delete the API key \"{name}\"?",
+  "warning": "Warning",
+  "add_api_key": "Add API key",
+  "error_occur": "Error occured",
   "graph": "Graph",
   "hide_sidebar": "Hide sidebar",
+  "misc": "Misc",
+  "model": "Model",
   "name": "Name",
+  "nickname": "Nickname",
   "new_chat": "New chat",
   "new_conversation": "New conversation",
+  "no_conversations": "No conversations yet",
   "password": "Password",
+  "profile": "Profile",
+  "provider": "Provider",
+  "save": "Save",
   "send_message": "Send message",
   "settings": "Settings",
   "show_sidebar": "Show sidebar",
   "sign_in": "Sign In",
   "sign_out": "Sign Out",
   "sign_up": "Sign Up",
+  "smol_model": "Smol model",
   "welcome": "What would you like to chat today?",
-  "no_conversations": "No conversations yet"
+  "format_datetime": [
+    {
+      "declarations": [
+        "input date",
+        "local formattedDate = date: datetime year=numeric month=2-digit day=2-digit hour=2-digit minute=2-digit second=2-digit hour12=false"
+      ],
+      "match": {
+        "date=*": "{formattedDate}"
+      }
+    }
+  ]
 }

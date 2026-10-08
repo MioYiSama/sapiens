@@ -2,6 +2,10 @@
   "name": "sapiens",
   "version": "0.0.0",
   "private": true,
+  "homepage": "https://sapiens.mioyi.net",
+  "repository": {
+    "url": "https://github.com/MioYiSama/sapiens"
+  },
   "type": "module",
   "scripts": {
     "build:docker": "docker compose -f docker/docker-compose.yaml build app",
@@ -20,6 +24,7 @@
     "@tanstack/ai-anthropic": "catalog:",
     "@tanstack/ai-gemini": "catalog:",
     "@tanstack/ai-openai": "catalog:",
+    "@tanstack/ai-persistence": "catalog:",
     "@tanstack/ai-react": "catalog:",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-hotkeys": "catalog:",
@@ -38,6 +43,7 @@
     "srvx": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
+    "uuid": "catalog:",
     "zod": "catalog:",
     "zustand": "catalog:"
   },
@@ -62,7 +68,7 @@
     },
     "runtime": {
       "name": "node",
-      "version": "26.10.0",
+      "version": "26.11.0",
       "onFail": "download"
     }
   }

@@ -2,8 +2,9 @@ import { fetchServerSentEvents, useChat } from "@tanstack/ai-react";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { cn } from "cn";
-import { PlusIcon, SendIcon } from "lucide-react";
+import { ImageIcon, PlusIcon, SendIcon } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
+import * as uuid from "uuid";
 import * as z from "zod";
 
 import { AnthropicIcon, GoogleIcon, OpenAiIcon } from "@/components/icons";
@@ -37,61 +38,63 @@ export const Route = createFileRoute("/_main/{-$id}")({
     },
   },
   loader() {
-    return { uuid: crypto.randomUUID() };
+    return { threadId: uuid.v7() };
   },
-  component() {
-    const { uuid } = Route.useLoaderData();
+  component: RouteComponent,
+});
 
-    const { id } = Route.useParams();
+function RouteComponent() {
+  const { threadId } = Route.useLoaderData();
 
-    if (id === undefined) {
-      return (
-        <main className="flex size-full flex-col items-center p-4">
-          <div className="flex size-full max-w-xl flex-col items-center justify-center gap-6">
-            <h1 className="text-xl">{m.welcome()}</h1>
-            <Link to="/{-$id}" params={{ id: uuid }}>
-              {uuid}
-            </Link>
-            <ChatInput />
-          </div>
-        </main>
-      );
-    }
+  const { id } = Route.useParams();
 
+  if (id === undefined) {
     return (
-      <main className="flex size-full flex-col items-center p-4">
-        <div className="flex size-full max-w-xl flex-col items-center">
-          <div className="flex w-full grow flex-col gap-4">
-            <Bubble align="start">
-              <BubbleContent>
-                id is "{id}" ({typeof id})
-                <AnthropicIcon />
-                <GoogleIcon />
-                <OpenAiIcon />
-              </BubbleContent>
-            </Bubble>
-
-            <Bubble variant="secondary" align="end">
-              <BubbleContent>
-                <Link to="/{-$id}" params={{ id: "1111-1111" }}>
-                  go to http://localhost:5173/zh/1111-1111
-                </Link>
-              </BubbleContent>
-            </Bubble>
-
-            <Bubble variant="secondary" align="end">
-              <BubbleContent>
-                I checked the registry output and removed the stale route.
-              </BubbleContent>
-            </Bubble>
-          </div>
-
+      <div className="flex size-full flex-col items-center p-4">
+        <div className="flex size-full max-w-xl flex-col items-center justify-center gap-6">
+          <h1 className="text-xl">{m.welcome()}</h1>
+          <Link to="/{-$id}" params={{ id: threadId }}>
+            {threadId}
+          </Link>
           <ChatInput />
         </div>
-      </main>
+      </div>
     );
-  },
-});
+  }
+
+  return (
+    <main className="flex size-full flex-col items-center p-4">
+      <div className="flex size-full max-w-xl flex-col items-center">
+        <div className="flex w-full grow flex-col gap-4">
+          <Bubble align="start">
+            <BubbleContent>
+              id is "{id}" ({typeof id})
+              <AnthropicIcon />
+              <GoogleIcon />
+              <OpenAiIcon />
+            </BubbleContent>
+          </Bubble>
+
+          <Bubble variant="secondary" align="end">
+            <BubbleContent>
+              <Link to="/{-$id}" params={{ id: "1111-1111" }}>
+                go to http://localhost:5173/zh/1111-1111
+              </Link>
+            </BubbleContent>
+          </Bubble>
+
+          <Bubble variant="secondary" align="end">
+            <BubbleContent>
+              I checked the registry output and removed the stale route.
+            </BubbleContent>
+          </Bubble>
+        </div>
+
+        <ChatInput />
+      </div>
+    </main>
+  );
+}
 
 function ChatInput() {
   useHotkey("Mod+Enter", () => {
@@ -169,43 +172,46 @@ function ChatInput() {
     };
   }, []);
 
-  const sendButton = (
-    <Tooltip>
-      <TooltipTrigger
-        render={(props) => (
-          <InputGroupButton
-            {...props}
-            type="submit"
-            variant="default"
-            size="icon-sm"
-            className={cn("rounded-full", multiline && "ml-auto")}
-            onClick={async () => {
-              await sendMessage(textareaRef.current!.value);
-              textareaRef.current!.value = "";
-            }}
-          >
-            <SendIcon />
-          </InputGroupButton>
-        )}
+  return (
+    <InputGroup className={cn("rounded-[2rem]", multiline ? "py-1" : "px-1")}>
+      <InputGroupTextarea
+        ref={textareaRef}
+        rows={1}
+        className={cn("max-h-64 min-h-0 min-w-0 scrollbar-none", multiline && "px-4 pt-3")}
       />
-      <TooltipContent>
-        <p>{m.send_message()}</p>
-      </TooltipContent>
-    </Tooltip>
-  );
 
-  const attachmentButton = (
+      {multiline ? (
+        <InputGroupAddon align="block-end">
+          <AttachmentButton />
+          <div className="mx-auto"></div>
+          <SendButton />
+        </InputGroupAddon>
+      ) : (
+        <>
+          <InputGroupAddon align="inline-start">
+            <AttachmentButton />
+          </InputGroupAddon>
+          <InputGroupAddon align="inline-end">
+            <SendButton />
+          </InputGroupAddon>
+        </>
+      )}
+    </InputGroup>
+  );
+}
+
+function AttachmentButton() {
+  return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={(props) => (
           <Tooltip>
             <TooltipTrigger
-              {...props}
-              render={(props) => (
+              render={
                 <InputGroupButton {...props} size="icon-sm" className="rounded-full">
                   <PlusIcon />
                 </InputGroupButton>
-              )}
+              }
             />
             <TooltipContent>
               <p>{m.add_attachment()}</p>
@@ -215,33 +221,36 @@ function ChatInput() {
       />
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem>TODO</DropdownMenuItem>
-          <DropdownMenuItem>TODO</DropdownMenuItem>
-          <DropdownMenuItem>TODO</DropdownMenuItem>
+          <DropdownMenuItem>
+            {/* TODO */}
+            <ImageIcon />
+            <span>{m.add_image()}</span>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
+}
 
+function SendButton() {
   return (
-    <InputGroup className={cn("rounded-[2rem]", multiline ? "py-1" : "px-1")}>
-      <InputGroupTextarea
-        ref={textareaRef}
-        rows={1}
-        className={cn("min-h-0 min-w-0 max-h-64 scrollbar-none", multiline && "px-4 pt-3")}
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <InputGroupButton
+            type="submit"
+            variant="default"
+            size="icon-sm"
+            className="rounded-full"
+            onClick={async () => {}}
+          >
+            <SendIcon />
+          </InputGroupButton>
+        }
       />
-
-      {multiline ? (
-        <InputGroupAddon align="block-end">
-          {attachmentButton}
-          {sendButton}
-        </InputGroupAddon>
-      ) : (
-        <>
-          <InputGroupAddon align="inline-start">{attachmentButton}</InputGroupAddon>
-          <InputGroupAddon align="inline-end">{sendButton}</InputGroupAddon>
-        </>
-      )}
-    </InputGroup>
+      <TooltipContent>
+        <p>{m.send_message()}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

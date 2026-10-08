@@ -1,18 +1,13 @@
 import { createAuthClient } from "better-auth/react";
 
-import { toast } from "@/components/ui/toast";
-
-import { m } from "../paraglide/messages";
+import { showErrorToast } from "../utils";
 
 export const authClient = createAuthClient({
   fetchOptions: {
     onError({ error }) {
-      toast.add({
-        type: "error",
-        title: m.auth_error(),
-        description: error.message,
-        priority: "high",
-      });
+      showErrorToast(error);
     },
   },
 });
+
+export type Session = typeof authClient.$Infer.Session;

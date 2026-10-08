@@ -18,31 +18,37 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: css },
     ],
   }),
-  shellComponent({ children }) {
-    return (
-      <html lang={getLocale()} className="size-full overflow-hidden">
-        <head>
-          <HeadContent />
-        </head>
-        <body className="size-full overflow-hidden">
-          {children}
-          <Scripts />
-        </body>
-      </html>
-    );
-  },
-  component() {
-    return (
-      <>
-        <TooltipProvider>
-          <Outlet />
-        </TooltipProvider>
-
-        <Toaster />
-      </>
-    );
-  },
-  notFoundComponent() {
-    return <p>Not Found</p>;
-  },
+  shellComponent: ShellComponent,
+  component: RouteComponent,
+  notFoundComponent: NotFoundComponent,
 });
+
+function ShellComponent({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang={getLocale()} className="size-full overflow-hidden" suppressHydrationWarning>
+      <head>
+        <HeadContent />
+      </head>
+      <body className="size-full overflow-hidden">
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+function RouteComponent() {
+  return (
+    <>
+      <TooltipProvider>
+        <Outlet />
+      </TooltipProvider>
+
+      <Toaster />
+    </>
+  );
+}
+
+function NotFoundComponent() {
+  return <p>Not Found</p>;
+}

@@ -1,37 +1,62 @@
-import { createFileRoute, Outlet, redirect, useMatchRoute } from "@tanstack/react-router";
-import { PanelLeftOpenIcon } from "lucide-react";
+import { createFileRoute, Link, Outlet, useMatchRoute } from "@tanstack/react-router";
+import { EditIcon, PanelLeftOpenIcon, SettingsIcon } from "lucide-react";
 
-import AppSidebar, { AppSidebarProvider } from "@/components/AppSidebar";
-import { GitHubIcon } from "@/components/icons";
+import AppSidebarHeader from "@/components/AppSidebarHeader";
+import NavUser from "@/components/NavUser";
+import { ResizableSidebar, ResizableSidebarProvider } from "@/components/ResizableSidebar";
 import { Button } from "@/components/ui/button";
-import { useSidebar } from "@/components/ui/sidebar";
+import { Empty, EmptyDescription, EmptyHeader } from "@/components/ui/empty";
+import {
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getSession } from "@/lib/auth/functions";
+import { ensureSession } from "@/lib/auth/functions";
 import { m } from "@/lib/paraglide/messages";
 
 export const Route = createFileRoute("/_main")({
   async beforeLoad() {
-    const session = await getSession();
-
-    if (!session) {
-      throw redirect({ to: "/signin" });
-    }
-
-    return { session };
+    return { session: await ensureSession() };
   },
-  component() {
-    return (
-      <AppSidebarProvider>
-        <AppSidebar />
-
-        <div className="flex size-full flex-col">
-          <Header />
-          <Outlet />
-        </div>
-      </AppSidebarProvider>
-    );
-  },
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  const { session } = Route.useRouteContext();
+
+  return (
+    <ResizableSidebarProvider>
+      <ResizableSidebar>
+        <SidebarHeader>
+          <AppSidebarHeader />
+        </SidebarHeader>
+
+        <SidebarContent>
+          <AppSidebarMain />
+        </SidebarContent>
+
+        <SidebarFooter>
+          <NavUser session={session} />
+        </SidebarFooter>
+      </ResizableSidebar>
+
+      <div className="flex size-full flex-col">
+        <Header />
+        <main className="size-full">
+          <Outlet />
+        </main>
+      </div>
+    </ResizableSidebarProvider>
+  );
+}
 
 function Header() {
   const { toggleSidebar } = useSidebar();
@@ -58,13 +83,61 @@ function Header() {
 
       <Button
         variant="ghost"
+        size="icon"
         nativeButton={false}
-        render={(props) => (
-          <a {...props} href="https://github.com/MioYiSama/sapiens" target="_blank">
-            <GitHubIcon />
-          </a>
-        )}
+        render={
+          <Link to="/settings">
+            <SettingsIcon />
+          </Link>
+        }
       />
     </header>
+  );
+}
+
+function AppSidebarMain() {
+  return (
+    <>
+      <SidebarGroup>
+        <SidebarGroupLabel>{m.chat()}</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip={m.new_chat()}
+                render={
+                  <Link to="/">
+                    <EditIcon />
+                    <span>{m.new_chat()}</span>
+                  </Link>
+                }
+              />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      <SidebarGroup>
+        <SidebarGroupLabel>{m.graph()}</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>{/* TODO */}</SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+        <SidebarGroupLabel>{m.conversation()}</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <Empty>
+                <EmptyHeader>
+                  <EmptyDescription className="truncate">{m.no_conversations()}</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </>
   );
 }

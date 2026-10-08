@@ -1,22 +1,20 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-import { getSession } from "@/lib/auth/functions";
+import { ensureNoSession } from "@/lib/auth/functions";
 
 export const Route = createFileRoute("/_auth")({
   async beforeLoad() {
-    const session = await getSession();
-
-    if (session) {
-      throw redirect({ to: "/" });
-    }
+    await ensureNoSession();
   },
-  component() {
-    return (
-      <div className="flex size-full items-center justify-center">
-        <div className="w-xs">
-          <Outlet />
-        </div>
-      </div>
-    );
-  },
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  return (
+    <div className="flex size-full items-center justify-center">
+      <div className="w-xs">
+        <Outlet />
+      </div>
+    </div>
+  );
+}

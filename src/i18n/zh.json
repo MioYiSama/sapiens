@@ -1,23 +1,58 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
+  "about": "关于",
   "account_settings": "账户设置",
   "add_attachment": "添加附件",
-  "auth_error": "认证失败",
+  "add_image": "添加图片",
+  "ai": "AI",
+  "api_key": "API 密钥",
+  "appearance": "外观",
+  "avatar": "头像",
+  "avatar_size_limit": "头像的文件大小不能超过 {size}",
   "chat": "聊天",
+  "add": "添加",
+  "cancel": "取消",
+  "confirm": "确认",
+  "delete_api_key_alert": "你确定要删除 API 密钥“{name}”吗？",
+  "warning": "警告",
+  "add_api_key": "添加 API 密钥",
+  "error_occur": "发生错误",
+  "clear": "清除",
+  "common": "通用",
   "conversation": "对话",
+  "default_model": "默认模型",
   "email": "邮箱",
+  "repository": "源码仓库",
   "graph": "图谱",
   "hide_sidebar": "隐藏侧边栏",
-  "name": "昵称",
+  "misc": "杂项",
+  "nickname": "昵称",
+  "model": "模型",
+  "name": "名称",
   "new_chat": "新聊天",
   "new_conversation": "新对话",
+  "no_conversations": "暂无对话",
   "password": "密码",
+  "profile": "档案",
+  "provider": "供应商",
+  "save": "保存",
   "send_message": "发送消息",
   "settings": "设置",
   "show_sidebar": "显示侧边栏",
   "sign_in": "登录",
   "sign_out": "登出",
   "sign_up": "注册",
+  "smol_model": "轻量模型",
   "welcome": "今天想聊点什么？",
-  "no_conversations": "暂无对话"
+  "format_datetime": [
+    {
+      "declarations": [
+        "input date",
+        "local formattedDate = date: datetime year=numeric month=2-digit day=2-digit hour=2-digit minute=2-digit second=2-digit hour12=false"
+      ],
+      "match": {
+        "date=*": "{formattedDate}"
+      }
+    }
+  ]
 }

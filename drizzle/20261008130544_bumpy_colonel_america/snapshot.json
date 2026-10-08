@@ -1,14 +1,64 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "bf303268-74cd-487c-a556-914b5e7a0aef",
+  "id": "28afd355-5fb8-4b6d-932d-661b89f7f5a0",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
+      "values": [
+        "chat_completions",
+        "responses",
+        "messages",
+        "generate_content",
+        "interactions"
+      ],
+      "name": "provider_type",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "none",
+        "minimal",
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "name": "reasoning_effort",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
       "isRlsEnabled": false,
-      "name": "category",
+      "name": "api_key",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "conversation",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "model",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "provider",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "settings",
       "entityType": "tables",
       "schema": "public"
     },
@@ -47,7 +97,20 @@
       "name": "id",
       "entityType": "columns",
       "schema": "public",
-      "table": "category"
+      "table": "api_key"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "api_key"
     },
     {
       "type": "text",
@@ -60,7 +123,254 @@
       "name": "name",
       "entityType": "columns",
       "schema": "public",
-      "table": "category"
+      "table": "api_key"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "value",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "api_key"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "api_key"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "uuidv7()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "conversation"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "conversation"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'[]'",
+      "generated": null,
+      "identity": null,
+      "name": "messages",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "conversation"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "uuidv7()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "model"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "provider_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "model"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "identifier",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "model"
+    },
+    {
+      "type": "reasoning_effort",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'none'",
+      "generated": null,
+      "identity": null,
+      "name": "reasoning_effort",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "model"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "uuidv7()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "type": "provider_type",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'chat_completions'",
+      "generated": null,
+      "identity": null,
+      "name": "type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "api_key_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "base_url",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "uuidv7()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "settings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "user_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "settings"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "default_model",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "settings"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "smol_model",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "settings"
     },
     {
       "type": "text",
@@ -579,6 +889,142 @@
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
+      "name": "api_key_user_id_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "api_key"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "conversation_user_id_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "conversation"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "provider_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "provider",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "model_provider_id_provider_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "model"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "provider_user_id_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "api_key_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "api_key",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "provider_api_key_id_api_key_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "settings_user_id_user_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "settings"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "default_model"
+      ],
+      "schemaTo": "public",
+      "tableTo": "model",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "settings_default_model_model_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "settings"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "smol_model"
+      ],
+      "schemaTo": "public",
+      "tableTo": "model",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "name": "settings_smol_model_model_id_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "settings"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
       "name": "account_user_id_user_id_fkey",
       "entityType": "fks",
       "schema": "public",
@@ -606,9 +1052,49 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "category_pkey",
+      "name": "api_key_pkey",
       "schema": "public",
-      "table": "category",
+      "table": "api_key",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "conversation_pkey",
+      "schema": "public",
+      "table": "conversation",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "model_pkey",
+      "schema": "public",
+      "table": "model",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "provider_pkey",
+      "schema": "public",
+      "table": "provider",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "settings_pkey",
+      "schema": "public",
+      "table": "settings",
       "entityType": "pks"
     },
     {
@@ -650,6 +1136,52 @@
       "schema": "public",
       "table": "verification",
       "entityType": "pks"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id",
+        "name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "api_key_user_id_name_unique",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "api_key"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id",
+        "name"
+      ],
+      "nullsNotDistinct": false,
+      "name": "provider_user_id_name_unique",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "provider"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "conversation_user_id_key",
+      "schema": "public",
+      "table": "conversation",
+      "entityType": "uniques"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "nullsNotDistinct": false,
+      "name": "settings_user_id_key",
+      "schema": "public",
+      "table": "settings",
+      "entityType": "uniques"
     },
     {
       "nameExplicit": false,
