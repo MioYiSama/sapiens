@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,7 +73,7 @@ function RouteComponent() {
             <form.Field name="name">
               {(field) => (
                 <Field>
-                  <FieldLabel htmlFor={field.name}>{m.name()}</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{m.nickname()}</FieldLabel>
                   <Input
                     type="text"
                     id={field.name}

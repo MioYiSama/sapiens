@@ -82,7 +82,7 @@ function RouteComponent() {
             {(field) => (
               <Field orientation="horizontal">
                 <FieldLabel htmlFor={field.name} className="flex-none!">
-                  {m.name()}
+                  {m.nickname()}
                 </FieldLabel>
                 <Input
                   type="text"

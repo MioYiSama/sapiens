@@ -90,7 +90,7 @@ function RouteComponent() {
                       </AlertDialogMedia>
                       <AlertDialogTitle>{m.warning()}</AlertDialogTitle>
                       <AlertDialogDescription>
-                        {m.delete_api_key_alert({ name: "OpenAI" })}
+                        {m.delete_api_key_alert({ name: apiKey.name })}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
 

@@ -1,46 +1,80 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createMiddleware, createServerFn } from "@tanstack/react-start";
 import { and, eq } from "drizzle-orm";
 import * as z from "zod";
 
 import { db } from ".";
 import { ensureSession } from "../auth/functions";
-import { ApiKeySchema } from "../schema";
-import { apiKeyTable } from "./schema";
+import { ApiKeySchema, ProviderSchema, ProviderServerSchema } from "../schema";
+import { apiKeyTable, providerTable } from "./schema";
 
-export const listApiKey = createServerFn({ method: "GET" }).handler(async () => {
-  const session = await ensureSession();
-
-  const apiKeyList = await db.query.apiKeyTable.findMany({
-    where: {
-      userId: session.user.id,
-    },
-    columns: {
-      id: true,
-      name: true,
-      createdAt: true,
+const userIdMiddleware = createMiddleware({ type: "function" }).server(async ({ next }) => {
+  return await next({
+    context: {
+      userId: (await ensureSession()).user.id,
     },
   });
-
-  return apiKeyList;
 });
 
-export const addApiKey = createServerFn({ method: "POST" })
-  .validator(ApiKeySchema)
-  .handler(async ({ data }) => {
-    const session = await ensureSession();
+export const listApiKey = createServerFn({ method: "GET" })
+  .middleware([userIdMiddleware])
+  .handler(async ({ context: { userId } }) => {
+    return await db.query.apiKeyTable.findMany({
+      where: { userId },
+      columns: {
+        userId: false,
+        value: false,
+      },
+    });
+  });
 
+export const addApiKey = createServerFn({ method: "POST" })
+  .middleware([userIdMiddleware])
+  .validator(ApiKeySchema)
+  .handler(async ({ data, context: { userId } }) => {
     await db.insert(apiKeyTable).values({
-      userId: session.user.id,
+      userId,
       ...data,
     });
   });
 
 export const deleteApiKey = createServerFn({ method: "POST" })
+  .middleware([userIdMiddleware])
   .validator(z.uuid())
-  .handler(async ({ data }) => {
-    const session = await ensureSession();
-
+  .handler(async ({ data, context: { userId } }) => {
     await db
       .delete(apiKeyTable)
-      .where(and(eq(apiKeyTable.id, data), eq(apiKeyTable.userId, session.user.id)));
+      .where(and(eq(apiKeyTable.id, data), eq(apiKeyTable.userId, userId)));
+  });
+
+export const listProvider = createServerFn({ method: "POST" })
+  .middleware([userIdMiddleware])
+  .handler(async ({ context: { userId } }) => {
+    return await db.query.providerTable.findMany({
+      where: { userId },
+      columns: {
+        userId: false,
+      },
+    });
+  });
+
+export const addProvider = createServerFn({ method: "POST" })
+  .middleware([userIdMiddleware])
+  .validator(ProviderServerSchema)
+  .handler(async ({ data, context: { userId } }) => {
+    await db.insert(providerTable).values({
+      userId,
+      name: data.name,
+      type: data.type,
+      apiKeyId: data.apiKey,
+      baseUrl: data.baseUrl,
+    });
+  });
+
+export const deleteProvider = createServerFn({ method: "POST" })
+  .middleware([userIdMiddleware])
+  .validator(z.uuid())
+  .handler(async ({ data, context: { userId } }) => {
+    await db
+      .delete(providerTable)
+      .where(and(eq(providerTable.id, data), eq(providerTable.userId, userId)));
   });

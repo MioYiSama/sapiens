@@ -37,3 +37,18 @@ export const ApiKeySchema = z.object({
   name: z.string().trim().min(1),
   value: z.string(),
 });
+
+export const ProviderSchema = z.object({
+  name: z.string().trim().min(1),
+  type: ProviderTypeSchema,
+  apiKey: z.string().nullable(),
+  baseUrl: z
+    .string()
+    .trim()
+    .pipe(z.union([z.literal(""), z.url()]))
+    .transform((value) => (value === "" ? null : value)),
+});
+
+export const ProviderServerSchema = ProviderSchema.extend({
+  baseUrl: z.union([z.url(), z.null()]),
+});

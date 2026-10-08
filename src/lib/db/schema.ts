@@ -17,14 +17,13 @@ export const apiKeyTable = pgTable(
       .references(() => userTable.id, { onDelete: "cascade" }),
 
     name: text().notNull(),
-    value: text().notNull(),
+    value: text().notNull().default(""),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [unique().on(table.userId, table.name)],
 );
 
 export const providerType = pgEnum("provider_type", ProviderTypes);
-
 export const providerTable = pgTable(
   "provider",
   {
@@ -45,18 +44,22 @@ export const providerTable = pgTable(
 );
 
 export const reasoningEffort = pgEnum("reasoning_effort", ReasoningEfforts);
-export const modelTable = pgTable("model", {
-  id: uuid()
-    .notNull()
-    .default(sql`uuidv7()`)
-    .primaryKey(),
-  providerId: uuid("provider_id")
-    .notNull()
-    .references(() => providerTable.id, { onDelete: "cascade" }),
+export const modelTable = pgTable(
+  "model",
+  {
+    id: uuid()
+      .notNull()
+      .default(sql`uuidv7()`)
+      .primaryKey(),
+    providerId: uuid("provider_id")
+      .notNull()
+      .references(() => providerTable.id, { onDelete: "cascade" }),
 
-  identifier: text().notNull(),
-  reasoningEffort: reasoningEffort("reasoning_effort").notNull().default("none"),
-});
+    identifier: text().notNull(),
+    reasoningEffort: reasoningEffort("reasoning_effort").notNull().default("none"),
+  },
+  (table) => [unique().on(table.providerId, table.identifier, table.reasoningEffort)],
+);
 
 export const settingsTable = pgTable("settings", {
   id: uuid()
