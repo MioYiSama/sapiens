@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -64,6 +64,7 @@ function RouteComponent() {
                     value={field.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={field.meta.isInvalid}
                   />
                   {field.meta.isInvalid && <FieldError errors={field.errors} />}
                 </Field>
@@ -81,6 +82,7 @@ function RouteComponent() {
                     value={field.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={field.meta.isInvalid}
                   />
                   {field.meta.isInvalid && <FieldError errors={field.errors} />}
                 </Field>
@@ -98,6 +100,7 @@ function RouteComponent() {
                     value={field.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={field.meta.isInvalid}
                   />
                   {field.meta.isInvalid && <FieldError errors={field.errors} />}
                 </Field>
@@ -106,19 +109,17 @@ function RouteComponent() {
 
             <form.Subscribe selector={(state) => state.isSubmitting}>
               {(isSubmitting) => (
-                <>
-                  <Field>
-                    <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? <Spinner /> : m.sign_up()}
-                    </Button>
-                    <Button
-                      disabled={isSubmitting}
-                      variant="ghost"
-                      nativeButton={false}
-                      render={<Link to="/signin">{m.sign_in()}</Link>}
-                    />
-                  </Field>
-                </>
+                <Field>
+                  <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? <Spinner /> : m.sign_up()}
+                  </Button>
+                  <Button
+                    disabled={isSubmitting}
+                    variant="ghost"
+                    nativeButton={false}
+                    render={<Link to="/signin">{m.sign_in()}</Link>}
+                  />
+                </Field>
               )}
             </form.Subscribe>
           </FieldGroup>

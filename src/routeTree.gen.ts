@@ -19,6 +19,7 @@ import { Route as MainChar123IdChar125RouteImport } from './routes/_main/{-$id}'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsAboutRouteImport } from './routes/settings/about'
+import { Route as SettingsAgentRouteImport } from './routes/settings/agent'
 import { Route as SettingsApiKeyRouteImport } from './routes/settings/api-key'
 import { Route as SettingsModelRouteImport } from './routes/settings/model'
 import { Route as SettingsProviderRouteImport } from './routes/settings/provider'
@@ -72,6 +73,11 @@ const SettingsAboutRoute = SettingsAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => SettingsRoute,
 } as any)
+const SettingsAgentRoute = SettingsAgentRouteImport.update({
+  id: '/agent',
+  path: '/agent',
+  getParentRoute: () => SettingsRoute,
+} as any)
 const SettingsApiKeyRoute = SettingsApiKeyRouteImport.update({
   id: '/api-key',
   path: '/api-key',
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/{-$id}': typeof MainChar123IdChar125Route
   '/api/chat': typeof ApiChatRoute
   '/settings/about': typeof SettingsAboutRoute
+  '/settings/agent': typeof SettingsAgentRoute
   '/settings/api-key': typeof SettingsApiKeyRoute
   '/settings/model': typeof SettingsModelRoute
   '/settings/provider': typeof SettingsProviderRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/{-$id}': typeof MainChar123IdChar125Route
   '/api/chat': typeof ApiChatRoute
   '/settings/about': typeof SettingsAboutRoute
+  '/settings/agent': typeof SettingsAgentRoute
   '/settings/api-key': typeof SettingsApiKeyRoute
   '/settings/model': typeof SettingsModelRoute
   '/settings/provider': typeof SettingsProviderRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/_main/{-$id}': typeof MainChar123IdChar125Route
   '/api/chat': typeof ApiChatRoute
   '/settings/about': typeof SettingsAboutRoute
+  '/settings/agent': typeof SettingsAgentRoute
   '/settings/api-key': typeof SettingsApiKeyRoute
   '/settings/model': typeof SettingsModelRoute
   '/settings/provider': typeof SettingsProviderRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/{-$id}'
     | '/api/chat'
     | '/settings/about'
+    | '/settings/agent'
     | '/settings/api-key'
     | '/settings/model'
     | '/settings/provider'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/{-$id}'
     | '/api/chat'
     | '/settings/about'
+    | '/settings/agent'
     | '/settings/api-key'
     | '/settings/model'
     | '/settings/provider'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/_main/{-$id}'
     | '/api/chat'
     | '/settings/about'
+    | '/settings/agent'
     | '/settings/api-key'
     | '/settings/model'
     | '/settings/provider'
@@ -267,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsAboutRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/settings/agent': {
+      id: '/settings/agent'
+      path: '/agent'
+      fullPath: '/settings/agent'
+      preLoaderRoute: typeof SettingsAgentRouteImport
+      parentRoute: typeof SettingsRoute
+    }
     '/settings/api-key': {
       id: '/settings/api-key'
       path: '/api-key'
@@ -324,6 +343,7 @@ const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 
 interface SettingsRouteChildren {
   SettingsAboutRoute: typeof SettingsAboutRoute
+  SettingsAgentRoute: typeof SettingsAgentRoute
   SettingsApiKeyRoute: typeof SettingsApiKeyRoute
   SettingsModelRoute: typeof SettingsModelRoute
   SettingsProviderRoute: typeof SettingsProviderRoute
@@ -332,6 +352,7 @@ interface SettingsRouteChildren {
 
 const SettingsRouteChildren: SettingsRouteChildren = {
   SettingsAboutRoute: SettingsAboutRoute,
+  SettingsAgentRoute: SettingsAgentRoute,
   SettingsApiKeyRoute: SettingsApiKeyRoute,
   SettingsModelRoute: SettingsModelRoute,
   SettingsProviderRoute: SettingsProviderRoute,

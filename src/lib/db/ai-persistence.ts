@@ -4,9 +4,9 @@ import {
   memoryPersistence,
 } from "@tanstack/ai-persistence";
 
-import { ensureSession } from "./auth/functions";
-import { db } from "./db";
-import { conversationTable } from "./db/schema";
+import { db } from ".";
+import { ensureSession } from "../auth/functions";
+import { conversationTable } from "./schema";
 
 export const aiPersistence = composePersistence(memoryPersistence(), {
   overrides: {

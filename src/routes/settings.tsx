@@ -4,8 +4,10 @@ import {
   CircleUserRoundIcon,
   InfoIcon,
   KeyRoundIcon,
+  LucideIcon,
   PanelLeftOpenIcon,
   ServerIcon,
+  SparklesIcon,
 } from "lucide-react";
 
 import AppSidebarHeader from "@/components/AppSidebarHeader";
@@ -27,6 +29,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ensureSession } from "@/lib/auth/functions";
 import { m } from "@/lib/paraglide/messages";
+import type { FileRouteTypes } from "@/routeTree.gen";
 
 export const Route = createFileRoute("/settings")({
   async beforeLoad() {
@@ -83,85 +86,82 @@ function Header() {
   );
 }
 
+const Navigations = [
+  {
+    group: m.common(),
+    items: [
+      {
+        label: m.profile(),
+        icon: CircleUserRoundIcon,
+        to: "/settings",
+      },
+    ],
+  },
+  {
+    group: m.ai(),
+    items: [
+      {
+        label: m.api_key(),
+        icon: KeyRoundIcon,
+        to: "/settings/api-key",
+      },
+      {
+        label: m.provider(),
+        icon: ServerIcon,
+        to: "/settings/provider",
+      },
+      {
+        label: m.model(),
+        icon: BoxIcon,
+        to: "/settings/model",
+      },
+      {
+        label: m.agent(),
+        icon: SparklesIcon,
+        to: "/settings/agent",
+      },
+    ],
+  },
+  {
+    group: m.misc(),
+    items: [
+      {
+        label: m.about(),
+        icon: InfoIcon,
+        to: "/settings/about",
+      },
+    ],
+  },
+] satisfies Array<{
+  group: string;
+  items: Array<{
+    label: string;
+    icon: LucideIcon;
+    to: FileRouteTypes["to"];
+  }>;
+}>;
+
 function NavSettings() {
-  return (
-    <>
-      <SidebarGroup>
-        <SidebarGroupLabel>{m.common()}</SidebarGroupLabel>
+  return Navigations.map((navigation) => (
+    <SidebarGroup key={navigation.group}>
+      <SidebarGroupLabel>{navigation.group}</SidebarGroupLabel>
+      <SidebarGroupContent>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip={m.profile()}
-              render={
-                <Link to="/settings">
-                  <CircleUserRoundIcon />
-                  <span>{m.profile()}</span>
-                </Link>
-              }
-            />
-          </SidebarMenuItem>
+          {navigation.items.map((item) => (
+            <SidebarMenuItem key={item.label}>
+              <SidebarMenuButton
+                tooltip={item.label}
+                render={
+                  <Link to={item.to}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </Link>
+                }
+              />
+            </SidebarMenuItem>
+          ))}
         </SidebarMenu>
-      </SidebarGroup>
-
-      <SidebarGroup>
-        <SidebarGroupLabel>{m.ai()}</SidebarGroupLabel>
-        <SidebarGroupContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                tooltip={m.api_key()}
-                render={
-                  <Link to="/settings/api-key">
-                    <KeyRoundIcon />
-                    <span>{m.api_key()}</span>
-                  </Link>
-                }
-              />
-            </SidebarMenuItem>
-
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                tooltip={m.provider()}
-                render={
-                  <Link to="/settings/provider">
-                    <ServerIcon />
-                    <span>{m.provider()}</span>
-                  </Link>
-                }
-              />
-            </SidebarMenuItem>
-
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                tooltip={m.model()}
-                render={
-                  <Link to="/settings/model">
-                    <BoxIcon />
-                    <span>{m.model()}</span>
-                  </Link>
-                }
-              />
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarGroup>
-
-      <SidebarGroup>
-        <SidebarGroupLabel>{m.misc()}</SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip={m.about()}
-              render={
-                <Link to="/settings/about">
-                  <InfoIcon />
-                  <span>{m.about()}</span>
-                </Link>
-              }
-            />
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-    </>
-  );
+      </SidebarGroupContent>
+    </SidebarGroup>
+  ));
 }

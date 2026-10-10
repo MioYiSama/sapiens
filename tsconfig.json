@@ -1,12 +1,15 @@
 {
   "include": ["src", "*.config.ts"],
   "compilerOptions": {
-    "skipLibCheck": true,
     "allowJs": true,
-    "noEmit": true,
-    "moduleResolution": "bundler",
-
     "jsx": "react-jsx",
+
+    "moduleResolution": "bundler",
+    "noEmit": true,
+
+    "skipLibCheck": true,
+    "strict": true,
+
     "paths": {
       "@/*": ["./src/*"]
     }

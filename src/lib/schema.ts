@@ -1,5 +1,8 @@
 import * as z from "zod";
 
+import { m } from "./paraglide/messages";
+import { fileToBase64 } from "./utils";
+
 export const ProviderTypes = [
   "chat_completions",
   "responses",
@@ -38,17 +41,37 @@ export const ApiKeySchema = z.object({
   value: z.string(),
 });
 
+export const ProfileSchema = z.object({
+  name: z.string().trim().min(1),
+  image: z
+    .union([z.string(), z.instanceof(File), z.null()])
+    .refine((image) => !(image instanceof File) || image.size <= 1024 * 1024, {
+      error: m.avatar_size_limit({ size: "1 MB" }),
+    })
+    .transform((image) => (image instanceof File ? fileToBase64(image) : image)),
+});
+
 export const ProviderSchema = z.object({
   name: z.string().trim().min(1),
   type: ProviderTypeSchema,
-  apiKey: z.string().nullable(),
-  baseUrl: z
-    .string()
-    .trim()
-    .pipe(z.union([z.literal(""), z.url()]))
-    .transform((value) => (value === "" ? null : value)),
+  apiKeyId: z.uuid().nullable(),
+  baseUrl: z.union([
+    z.null(),
+    z
+      .string()
+      .trim()
+      .pipe(z.union([z.literal(""), z.url()]))
+      .transform((value) => (value === "" ? null : value)),
+  ]),
 });
 
-export const ProviderServerSchema = ProviderSchema.extend({
+export const ProviderServerSchema = z.object({
+  ...ProviderSchema.shape,
   baseUrl: z.union([z.url(), z.null()]),
+});
+
+export const ModelSchema = z.object({
+  identifier: z.string().min(1),
+  providerId: z.uuid(),
+  reasoningEffort: ReasoningEffortSchema,
 });

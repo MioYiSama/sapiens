@@ -32,6 +32,7 @@ export default defineConfig({
     nitro({
       preset: "node-server",
       output: { dir: "dist" },
+      minify: true,
     }),
     svgr(),
   ],
@@ -45,7 +46,6 @@ export default defineConfig({
       onLog(level, log, handler) {
         // Suppress "use client" warning
         if (log.code === "MODULE_LEVEL_DIRECTIVE") return;
-
         return handler(level, log);
       },
     },
@@ -59,8 +59,6 @@ export default defineConfig({
     ignorePatterns,
     sortImports: true,
     sortPackageJson: true,
-    sortTailwindcss: {
-      functions: ["cn"],
-    },
+    sortTailwindcss: { functions: ["cn"] },
   },
 });

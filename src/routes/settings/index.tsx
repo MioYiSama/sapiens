@@ -2,7 +2,6 @@ import { useForm, useSelector } from "@tanstack/react-form";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
-import * as z from "zod";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { authClient } from "@/lib/auth/client";
 import { m } from "@/lib/paraglide/messages";
-import { fileToBase64 } from "@/lib/utils";
+import { ProfileSchema } from "@/lib/schema";
 
 export const Route = createFileRoute("/settings/")({
   staticData: {
@@ -24,8 +23,6 @@ function RouteComponent() {
   const { session } = Route.useRouteContext();
   const router = useRouter();
 
-  const fileInput = useRef<HTMLInputElement>(null);
-
   const form = useForm({
     defaultValues: {
       name: session.user.name,
@@ -35,31 +32,20 @@ function RouteComponent() {
       {
         triggers: [],
         runOnSubmit: true,
-        run: z.object({
-          name: z.string().trim().min(1),
-          image: z
-            .union([z.string(), z.instanceof(File)])
-            .nullable()
-            .refine((image) => !(image instanceof File) || image.size <= 1024 * 1024, {
-              error: m.avatar_size_limit({ size: "1 MB" }),
-            })
-            .transform((image) => (image instanceof File ? fileToBase64(image) : image)),
-        }),
+        run: ProfileSchema,
       },
     ],
     async onSubmit({ schemaOutputs: [value] }) {
       await authClient.updateUser(value);
-      router.invalidate();
+      await router.invalidate();
     },
   });
 
   const imageState = useSelector(form.atom, (state) => state.values.image);
-
   const preview = useMemo(
     () => (imageState instanceof File ? URL.createObjectURL(imageState) : imageState),
     [imageState],
   );
-
   useEffect(() => {
     if (imageState instanceof File) {
       return () => {
@@ -67,6 +53,8 @@ function RouteComponent() {
       };
     }
   }, [imageState, preview]);
+
+  const fileInput = useRef<HTMLInputElement>(null);
 
   return (
     <div className="p-4">
@@ -92,6 +80,7 @@ function RouteComponent() {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   className="max-w-64"
+                  aria-invalid={field.meta.isInvalid}
                 />
                 {field.meta.isInvalid && <FieldError errors={field.errors} />}
               </Field>

@@ -9,7 +9,7 @@ import { openaiText } from "@tanstack/ai-openai";
 import { reconstructChat, withPersistence } from "@tanstack/ai-persistence";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { aiPersistence } from "@/lib/ai-persistence";
+import { aiPersistence } from "@/lib/db/ai-persistence";
 
 export const Route = createFileRoute("/api/chat")({
   server: {
@@ -39,9 +39,7 @@ export const Route = createFileRoute("/api/chat")({
           });
         }
 
-        return reconstructChat(aiPersistence, request.request, {
-          authorize: async (threadId) => {},
-        });
+        return reconstructChat(aiPersistence, request.request, {});
       },
     },
   },

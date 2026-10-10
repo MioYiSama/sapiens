@@ -1,7 +1,7 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { PlusIcon, TrashIcon, TriangleAlertIcon } from "lucide-react";
+import { EditIcon, PlusIcon, TrashIcon, TriangleAlertIcon } from "lucide-react";
 
 import { AnthropicIcon, GoogleIcon, IconComponent, OpenAiIcon } from "@/components/icons";
 import {
@@ -32,7 +32,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader } from "@/components/ui/empty";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -52,7 +52,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
-import { addProvider, deleteProvider, listApiKey, listProvider } from "@/lib/db/functions";
+import {
+  addProvider,
+  deleteProvider,
+  listApiKey,
+  listProvider,
+  updateProvider,
+} from "@/lib/db/functions";
 import { m } from "@/lib/paraglide/messages";
 import { ProviderSchema, ProviderType, ProviderTypes } from "@/lib/schema";
 import { showErrorToast } from "@/lib/utils";
@@ -69,6 +75,8 @@ export const Route = createFileRoute("/settings/provider")({
   },
   component: RouteComponent,
 });
+
+type Provider = Awaited<ReturnType<typeof listProvider>>[number];
 
 function ProviderIcon({
   type,
@@ -101,90 +109,114 @@ const ProviderTypeSelectItems = ProviderTypes.map((type) => ({
 
 function RouteComponent() {
   const { providers } = Route.useLoaderData();
-  const router = useRouter();
+
+  if (providers.length === 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyDescription>暂无供应商</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <ProviderDialog />
+        </EmptyContent>
+      </Empty>
+    );
+  }
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <AddProviderDialog />
-      </div>
+    <div className="flex flex-col gap-4 p-4">
+      <ProviderDialog />
 
-      <ul className="flex flex-col gap-4">
-        {providers.length === 0 ? (
-          <Empty>
-            <EmptyHeader>
-              <EmptyDescription>暂无供应商</EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        ) : (
-          providers.map((provider) => (
-            <li key={provider.id}>
-              <Item variant="outline">
-                <ItemMedia>
-                  <ProviderIcon type={provider.type} className="size-6" />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemTitle>{provider.name}</ItemTitle>
-                  <ItemDescription>
-                    {provider.baseUrl ?? ""}
-                    {ProviderTypeLabel[provider.type]}
-                  </ItemDescription>
-                </ItemContent>
-                <ItemActions>
-                  <AlertDialog>
-                    <AlertDialogTrigger
-                      render={
-                        <Button variant="destructive">
-                          <TrashIcon />
-                        </Button>
-                      }
-                    />
-                    <AlertDialogContent size="sm">
-                      <AlertDialogHeader>
-                        <AlertDialogMedia className="bg-destructive/10 text-destructive">
-                          <TriangleAlertIcon />
-                        </AlertDialogMedia>
-                        <AlertDialogTitle>{m.warning()}</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          {m.delete_provider_alert({ name: provider.name })}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>{m.cancel()}</AlertDialogCancel>
-                        <AlertDialogAction
-                          variant="destructive"
-                          onClick={async () => {
-                            await deleteProvider({ data: provider.id });
-                            router.invalidate();
-                          }}
-                        >
-                          {m.confirm()}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </ItemActions>
-              </Item>
-            </li>
-          ))
-        )}
+      <ul className="grid gap-4 md:grid-cols-2">
+        {providers.map((provider) => (
+          <li key={provider.id}>
+            <ProviderItem provider={provider} />
+          </li>
+        ))}
       </ul>
     </div>
   );
 }
 
-function AddProviderDialog() {
+function ProviderItem({ provider }: { provider: Provider }) {
+  const router = useRouter();
+
+  async function onDelete() {
+    try {
+      await deleteProvider({ data: provider.id });
+      await router.invalidate();
+    } catch (error) {
+      showErrorToast(error);
+    }
+  }
+
+  return (
+    <Item variant="outline">
+      <ItemMedia>
+        <ProviderIcon type={provider.type} className="size-6" />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>{provider.name}</ItemTitle>
+        <ItemDescription>
+          {provider.baseUrl ?? ""}
+          {ProviderTypeLabel[provider.type]}
+        </ItemDescription>
+      </ItemContent>
+      <ItemActions>
+        <ProviderDialog provider={provider} />
+
+        <AlertDialog>
+          <AlertDialogTrigger
+            render={
+              <Button variant="destructive" size="icon">
+                <TrashIcon />
+              </Button>
+            }
+          />
+          <AlertDialogContent size="sm">
+            <AlertDialogHeader>
+              <AlertDialogMedia className="bg-destructive/10 text-destructive">
+                <TriangleAlertIcon />
+              </AlertDialogMedia>
+              <AlertDialogTitle>{m.warning()}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {m.delete_provider_alert({ name: provider.name })}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel>{m.cancel()}</AlertDialogCancel>
+              <AlertDialogAction variant="destructive" onClick={onDelete}>
+                {m.confirm()}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </ItemActions>
+    </Item>
+  );
+}
+
+function ProviderDialog({ provider }: { provider?: Provider }) {
+  const isAdd = provider === undefined;
+
   const handle = DialogPrimitive.createHandle();
   const router = useRouter();
 
   const form = useForm({
-    defaultValues: {
-      name: "",
-      type: "chat_completions" as ProviderType,
-      apiKey: null as string | null,
-      baseUrl: "",
-    },
+    defaultValues: isAdd
+      ? {
+          name: "",
+          type: "chat_completions" as ProviderType,
+          apiKeyId: null as string | null,
+          baseUrl: "",
+        }
+      : {
+          name: provider.name,
+          type: provider.type,
+          apiKeyId: provider.apiKeyId,
+          baseUrl: provider.baseUrl,
+        },
     validators: [
       {
         triggers: [],
@@ -194,10 +226,19 @@ function AddProviderDialog() {
     ],
     async onSubmit({ schemaOutputs: [data] }) {
       try {
-        await addProvider({ data });
+        if (isAdd) {
+          await addProvider({ data });
+        } else {
+          await updateProvider({
+            data: {
+              ...data,
+              id: provider.id,
+            },
+          });
+        }
+
         handle.close();
         router.invalidate();
-        form.reset();
       } catch (error) {
         showErrorToast(error);
       }
@@ -210,10 +251,16 @@ function AddProviderDialog() {
     <Dialog handle={handle}>
       <DialogTrigger
         render={
-          <Button>
-            <PlusIcon />
-            <span>{m.add()}</span>
-          </Button>
+          isAdd ? (
+            <Button>
+              <PlusIcon />
+              <span>{m.add()}</span>
+            </Button>
+          ) : (
+            <Button variant="outline" size="icon">
+              <EditIcon />
+            </Button>
+          )
         }
       />
 
@@ -226,7 +273,7 @@ function AddProviderDialog() {
             form.handleSubmit();
           }}
         >
-          <DialogHeader>{m.add_provider()}</DialogHeader>
+          <DialogHeader>{isAdd ? m.add_provider() : m.edit_provider()}</DialogHeader>
 
           <FieldGroup>
             <form.Field name="name">
@@ -240,6 +287,7 @@ function AddProviderDialog() {
                     value={field.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={field.meta.isInvalid}
                   />
                   {field.meta.isInvalid && <FieldError errors={field.errors} />}
                 </Field>
@@ -259,6 +307,7 @@ function AddProviderDialog() {
                     onValueChange={(value) => {
                       if (value) field.handleChange(value);
                     }}
+                    aria-invalid={field.meta.isInvalid}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -279,7 +328,7 @@ function AddProviderDialog() {
               )}
             </form.Field>
 
-            <form.Field name="apiKey">
+            <form.Field name="apiKeyId">
               {(field) => (
                 <Field>
                   <FieldLabel htmlFor={field.name}>
@@ -296,6 +345,7 @@ function AddProviderDialog() {
                     itemToStringLabel={(id) =>
                       apiKeyList.find((item) => item.id === id)?.name ?? id
                     }
+                    aria-invalid={field.meta.isInvalid}
                   >
                     <ComboboxInput />
 
@@ -326,9 +376,10 @@ function AddProviderDialog() {
                     type="text"
                     id={field.name}
                     name={field.name}
-                    value={field.value}
+                    value={field.value ?? ""}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={field.meta.isInvalid}
                   />
                   {field.meta.isInvalid && <FieldError errors={field.errors} />}
                 </Field>
@@ -341,7 +392,7 @@ function AddProviderDialog() {
             <form.Subscribe selector={(state) => state.isSubmitting}>
               {(isSubmitting) => (
                 <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? <Spinner /> : m.add()}
+                  {isSubmitting ? <Spinner /> : isAdd ? m.add() : m.save()}
                 </Button>
               )}
             </form.Subscribe>

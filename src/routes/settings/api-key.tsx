@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader } from "@/components/ui/empty";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -53,63 +54,32 @@ export const Route = createFileRoute("/settings/api-key")({
   component: RouteComponent,
 });
 
+type ApiKey = Awaited<ReturnType<typeof listApiKey>>[number];
+
 function RouteComponent() {
   const { apiKeyList } = Route.useLoaderData();
-  const router = useRouter();
+
+  if (apiKeyList.length === 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyDescription>{m.no_api_key()}</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <AddApiKeyDialog />
+        </EmptyContent>
+      </Empty>
+    );
+  }
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <AddApiKeyDialog />
-      </div>
+    <div className="flex flex-col gap-4 p-4">
+      <AddApiKeyDialog />
 
-      <ul className="flex flex-col gap-4">
+      <ul className="grid gap-4 md:grid-cols-2">
         {apiKeyList.map((apiKey) => (
           <li key={apiKey.id}>
-            <Item variant="outline">
-              <ItemMedia>
-                <KeyRoundIcon />
-              </ItemMedia>
-              <ItemContent>
-                <ItemTitle>{apiKey.name}</ItemTitle>
-                <ItemDescription>{m.format_datetime({ date: apiKey.createdAt })}</ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <AlertDialog>
-                  <AlertDialogTrigger
-                    render={
-                      <Button variant="destructive">
-                        <TrashIcon />
-                      </Button>
-                    }
-                  />
-                  <AlertDialogContent size="sm">
-                    <AlertDialogHeader>
-                      <AlertDialogMedia className="bg-destructive/10 text-destructive">
-                        <TriangleAlertIcon />
-                      </AlertDialogMedia>
-                      <AlertDialogTitle>{m.warning()}</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {m.delete_api_key_alert({ name: apiKey.name })}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>{m.cancel()}</AlertDialogCancel>
-                      <AlertDialogAction
-                        variant="destructive"
-                        onClick={async () => {
-                          await deleteApiKey({ data: apiKey.id });
-                          router.invalidate();
-                        }}
-                      >
-                        {m.confirm()}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </ItemActions>
-            </Item>
+            <ApiKeyItem apiKey={apiKey} />
           </li>
         ))}
       </ul>
@@ -117,9 +87,65 @@ function RouteComponent() {
   );
 }
 
+function ApiKeyItem({ apiKey }: { apiKey: ApiKey }) {
+  const router = useRouter();
+
+  async function onDelete() {
+    try {
+      await deleteApiKey({ data: apiKey.id });
+      await router.invalidate();
+    } catch (error) {
+      showErrorToast(error);
+    }
+  }
+
+  return (
+    <Item variant="outline">
+      <ItemMedia>
+        <KeyRoundIcon />
+      </ItemMedia>
+
+      <ItemContent>
+        <ItemTitle>{apiKey.name}</ItemTitle>
+        <ItemDescription>{m.format_datetime({ date: apiKey.createdAt })}</ItemDescription>
+      </ItemContent>
+
+      <ItemActions>
+        <AlertDialog>
+          <AlertDialogTrigger
+            render={
+              <Button variant="destructive">
+                <TrashIcon />
+              </Button>
+            }
+          />
+
+          <AlertDialogContent size="sm">
+            <AlertDialogHeader>
+              <AlertDialogMedia className="bg-destructive/10 text-destructive">
+                <TriangleAlertIcon />
+              </AlertDialogMedia>
+              <AlertDialogTitle>{m.warning()}</AlertDialogTitle>
+              <AlertDialogDescription>
+                {m.delete_api_key_alert({ name: apiKey.name })}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogAction variant="destructive" onClick={onDelete}>
+                {m.confirm()}
+              </AlertDialogAction>
+              <AlertDialogCancel>{m.cancel()}</AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </ItemActions>
+    </Item>
+  );
+}
+
 function AddApiKeyDialog() {
   const handle = DialogPrimitive.createHandle();
-
   const router = useRouter();
 
   const form = useForm({
@@ -138,8 +164,8 @@ function AddApiKeyDialog() {
       try {
         await addApiKey({ data: value });
         handle.close();
-        router.invalidate();
         form.reset();
+        await router.invalidate();
       } catch (error) {
         showErrorToast(error);
       }
@@ -182,6 +208,7 @@ function AddApiKeyDialog() {
                     value={field.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={field.meta.isInvalid}
                   />
                   {field.meta.isInvalid && <FieldError errors={field.errors} />}
                 </Field>
@@ -191,7 +218,7 @@ function AddApiKeyDialog() {
             <form.Field name="value">
               {(field) => (
                 <Field>
-                  <FieldLabel htmlFor={field.name}>{m.api_key()}</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>{m.value()}</FieldLabel>
                   <Input
                     type="password"
                     id={field.name}
@@ -199,6 +226,7 @@ function AddApiKeyDialog() {
                     value={field.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={field.meta.isInvalid}
                   />
                   {field.meta.isInvalid && <FieldError errors={field.errors} />}
                 </Field>

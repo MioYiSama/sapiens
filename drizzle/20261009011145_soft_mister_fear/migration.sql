@@ -1,0 +1,4 @@
+ALTER TABLE "model" ADD CONSTRAINT "model_provider_id_identifier_reasoning_effort_unique" UNIQUE("provider_id","identifier","reasoning_effort");--> statement-breakpoint
+ALTER TABLE "settings" DROP CONSTRAINT "settings_default_model_model_id_fkey", ADD CONSTRAINT "settings_default_model_model_id_fkey" FOREIGN KEY ("default_model") REFERENCES "model"("id") ON DELETE SET NULL;--> statement-breakpoint
+ALTER TABLE "settings" DROP CONSTRAINT "settings_smol_model_model_id_fkey", ADD CONSTRAINT "settings_smol_model_model_id_fkey" FOREIGN KEY ("smol_model") REFERENCES "model"("id") ON DELETE SET NULL;--> statement-breakpoint
+ALTER TABLE "api_key" ADD CONSTRAINT "check_name" CHECK (LENGTH("name") > 0);

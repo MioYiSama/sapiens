@@ -71,8 +71,8 @@ export const settingsTable = pgTable("settings", {
     .unique()
     .references(() => userTable.id, { onDelete: "cascade" }),
 
-  defaultModel: uuid("default_model").references(() => modelTable.id),
-  smolModel: uuid("smol_model").references(() => modelTable.id),
+  defaultModel: uuid("default_model").references(() => modelTable.id, { onDelete: "set null" }),
+  smolModel: uuid("smol_model").references(() => modelTable.id, { onDelete: "set null" }),
 });
 
 export const conversationTable = pgTable("conversation", {
@@ -110,7 +110,7 @@ export default defineRelations(
         from: r.providerTable.apiKeyId,
         to: r.apiKeyTable.id,
       }),
-      modelTable: r.many.modelTable({
+      models: r.many.modelTable({
         from: r.providerTable.id,
         to: r.modelTable.providerId,
       }),
